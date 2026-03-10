@@ -157,9 +157,6 @@ tr:hover td{background:#fafbff;}
         <div class="field"><label class="label">Vigência</label><input class="inp" id="p-vigencia" placeholder="Jan/2026 a Jan/2027"/></div>
         <div class="field"><label class="label">Próxima Revisão</label><input class="inp" id="p-revisao" placeholder="Abr/2026"/></div>
         <div class="field"><label class="label">Valor</label><input class="inp" id="p-valor" placeholder="R$ 2.000/mês"/></div>
-        <div class="field"><label class="label">Ingressos Total</label><input class="inp" id="p-ing-total" type="number" value="15"/></div>
-        <div class="field"><label class="label">Ingressos Disponíveis</label><input class="inp" id="p-ing-disp" type="number" value="15"/></div>
-        <div class="field"><label class="label">Ingressos Utilizados</label><input class="inp" id="p-ing-usados" type="number" value="0"/></div>
       </div>
       <div class="modal-foot">
         <button class="btn-ghost" onclick="fecharModal('modal-partner')">Cancelar</button>
@@ -303,10 +300,12 @@ async function carregarTudo(){
   renderTodasReservas();
 }
 
+function reservasPorPartner(pid){ return todasReservas.filter(function(r){return r.partner_id===pid;}); }
+
 function renderDashboard(){
   var ativos = todosPartners.filter(function(p){return p.ativo !== false;}).length;
-  var totalUsados = todosPartners.reduce(function(a,p){return a+(p.ingressos_utilizados||0);},0);
-  var totalDisp = todosPartners.reduce(function(a,p){return a+(p.ingressos_disponiveis||0);},0);
+  var totalUsados = todasReservas.length;
+  var totalDisp = (ativos * 15) - totalUsados;
   document.getElementById('st-partners').textContent = ativos;
   document.getElementById('st-reservas').textContent = todasReservas.length;
   document.getElementById('st-ingressos').textContent = totalUsados;
@@ -334,7 +333,7 @@ function renderPartners(){
       '<td><strong>'+p.nome_empresa+'</strong></td>'+
       '<td style="color:var(--claro);">'+p.email_acesso+'</td>'+
       '<td>'+p.vigencia+'</td>'+
-      '<td>'+p.ingressos_utilizados+'/'+p.ingressos_total+'</td>'+
+      '<td>'+(reservasPorPartner(p.id).length)+'/15</td>'+
       '<td><span class="badge '+(ativo?'ativo':'inativo')+'">'+(ativo?'Ativo':'Inativo')+'</span></td>'+
       '<td><div class="td-actions">'+
         '<button class="btn-sm" onclick="verReservas(\''+p.id+'\',\''+p.nome_empresa+'\')">Reservas</button>'+
@@ -379,9 +378,7 @@ function abrirNovoPartner(){
   document.getElementById('p-vigencia').value = 'Jan/2026 a Jan/2027';
   document.getElementById('p-revisao').value = 'Abr/2026';
   document.getElementById('p-valor').value = 'R$ 2.000/mês';
-  document.getElementById('p-ing-total').value = '15';
-  document.getElementById('p-ing-disp').value = '15';
-  document.getElementById('p-ing-usados').value = '0';
+
   document.getElementById('modal-partner').classList.add('open');
 }
 
@@ -398,9 +395,7 @@ function editarPartner(id){
   document.getElementById('p-vigencia').value = p.vigencia||'';
   document.getElementById('p-revisao').value = p.proxima_revisao||'';
   document.getElementById('p-valor').value = p.valor||'';
-  document.getElementById('p-ing-total').value = p.ingressos_total||15;
-  document.getElementById('p-ing-disp').value = p.ingressos_disponiveis||0;
-  document.getElementById('p-ing-usados').value = p.ingressos_utilizados||0;
+
   document.getElementById('modal-partner').classList.add('open');
 }
 
@@ -411,9 +406,7 @@ async function salvarPartner(){
   var vigencia= document.getElementById('p-vigencia').value.trim();
   var revisao = document.getElementById('p-revisao').value.trim();
   var valor   = document.getElementById('p-valor').value.trim();
-  var ingTotal= parseInt(document.getElementById('p-ing-total').value)||15;
-  var ingDisp = parseInt(document.getElementById('p-ing-disp').value)||15;
-  var ingUsados=parseInt(document.getElementById('p-ing-usados').value)||0;
+
 
   if(!empresa){toast('⚠️ Informe o nome da empresa.');return;}
 
@@ -426,7 +419,6 @@ async function salvarPartner(){
       var upd = await _sb.from('partners').update({
         nome_empresa:empresa, email_acesso:email,
         vigencia:vigencia, proxima_revisao:revisao, valor:valor,
-        ingressos_total:ingTotal, ingressos_disponiveis:ingDisp, ingressos_utilizados:ingUsados
       }).eq('id',editandoId);
       if(upd.error){toast('❌ Erro ao salvar: '+upd.error.message);btn.innerHTML='Salvar Alterações';btn.disabled=false;return;}
       toast('✅ Partner atualizado com sucesso!');
@@ -440,7 +432,7 @@ async function salvarPartner(){
       var ins = await _sb.from('partners').insert({
         id:uid, nome_empresa:empresa, email_acesso:email,
         vigencia:vigencia, proxima_revisao:revisao, valor:valor,
-        ingressos_total:ingTotal, ingressos_disponiveis:ingDisp, ingressos_utilizados:ingUsados,
+        ingressos_total:15, ingressos_disponiveis:15, ingressos_utilizados:0,
         ativo:true
       });
       if(ins.error){toast('❌ Erro ao cadastrar: '+ins.error.message);btn.innerHTML='Cadastrar Partner';btn.disabled=false;return;}
