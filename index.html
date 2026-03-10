@@ -468,13 +468,18 @@ var eventoModalIdx = 0;
 
 // ── INIT ──
 async function init() {
-  const { data:{ session } } = await sb.auth.getSession();
-  document.getElementById('tela-loading').style.display = 'none';
-  if (session) {
-    await carregarTudo(session.user.id);
-    document.getElementById('tela-app').style.display = 'block';
-  } else {
-    document.getElementById('tela-login').style.display = 'flex';
+  try {
+    const { data:{ session } } = await sb.auth.getSession();
+    document.getElementById("tela-loading").style.display = "none";
+    if (session) {
+      await carregarTudo(session.user.id);
+      document.getElementById("tela-app").style.display = "block";
+    } else {
+      document.getElementById("tela-login").style.display = "flex";
+    }
+  } catch(e) {
+    document.getElementById("tela-loading").style.display = "none";
+    document.getElementById("tela-login").style.display = "flex";
   }
 }
 
