@@ -626,4 +626,21 @@ async function enviarDivulgacao(){
     if(res.ok){
       btn.innerHTML='✅ Enviado!';btn.style.background='var(--verde)';btn.style.color='#fff';
       form.reset();toast('✅ Material enviado! Análise em até 2 dias úteis.');
-      setTimeout(function(){bt
+      setTimeout(function(){bt      setTimeout(function(){btn.innerHTML='Enviar para análise →';btn.style.background='';btn.style.color='';btn.disabled=false;},4000);
+    } else {toast('❌ Erro ao enviar.');btn.innerHTML='Enviar para análise →';btn.disabled=false;}
+  } catch(e){toast('❌ Erro de conexão.');btn.innerHTML='Enviar para análise →';btn.disabled=false;}
+}
+
+// Timeout de segurança — se loading ficar por mais de 6s, mostra login
+setTimeout(function(){
+  var loading = document.getElementById('tela-loading');
+  if(loading && loading.style.display !== 'none'){
+    loading.style.display = 'none';
+    document.getElementById('tela-login').style.display = 'flex';
+  }
+}, 6000);
+
+init();
+</script>
+</body>
+</html>
