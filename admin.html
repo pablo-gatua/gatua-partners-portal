@@ -7,52 +7,23 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
-:root{--azul:#0c133d;--azul-medio:#1a2460;--dourado:#ffcf7d;--dourado-esc:#d49500;--fundo:#f4f5f9;--card:#fff;--borda:#e4e6ef;--texto:#1a1d2e;--medio:#5a5f7a;--claro:#9499b5;--verde:#1db87a;--vermelho:#f04444;--laranja:#f59e0b;}
+:root{--azul:#0c133d;--azul-medio:#1a2460;--dourado:#ffcf7d;--dourado-esc:#d49500;--fundo:#f4f5f9;--borda:#e4e6ef;--texto:#1a1d2e;--medio:#5a5f7a;--claro:#9499b5;--verde:#1db87a;--vermelho:#f04444;--laranja:#f59e0b;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Montserrat',system-ui,sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;}
-
-/* LOGIN */
-#tela-login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--azul) 0%,#1a2460 60%,#0a1030 100%);}
-.login-box{background:#fff;border-radius:20px;padding:44px 40px;width:100%;max-width:400px;box-shadow:0 32px 80px rgba(0,0,0,.3);}
-.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
-.login-badge{background:var(--azul);color:var(--dourado);font-size:18px;font-weight:800;letter-spacing:.08em;padding:7px 13px;border-radius:8px;}
-.login-brand{font-size:15px;font-weight:700;color:var(--azul);}
-.login-admin{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--vermelho);background:rgba(240,68,68,.1);padding:3px 10px;border-radius:20px;margin-bottom:28px;display:inline-block;margin-top:6px;}
-.login-title{font-size:20px;font-weight:800;color:var(--azul);margin-bottom:6px;}
-.login-desc{font-size:12px;color:var(--claro);margin-bottom:24px;}
-.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
-.login-label{font-size:10px;font-weight:700;color:var(--claro);letter-spacing:.14em;text-transform:uppercase;}
-.login-inp{background:var(--fundo);border:1.5px solid var(--borda);border-radius:9px;padding:12px 14px;font-size:13px;color:var(--texto);font-family:inherit;outline:none;width:100%;}
-.login-inp:focus{border-color:var(--azul);background:#fff;}
-.login-btn{width:100%;background:var(--dourado);color:var(--azul);border:none;padding:13px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:6px;}
-.login-btn:hover{background:#ffd98e;}
-.login-erro{background:#fff0f0;border:1px solid #fcc;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--vermelho);font-weight:600;margin-top:12px;display:none;}
-
-/* APP */
-#tela-app{display:none;}
 .topbar{background:var(--azul);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .tb-left{display:flex;align-items:center;gap:12px;}
 .tb-badge{background:var(--dourado);color:var(--azul);font-size:14px;font-weight:800;letter-spacing:.08em;padding:5px 10px;border-radius:6px;}
 .tb-name{font-size:13px;font-weight:700;color:#fff;}
 .tb-admin{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);}
-.tb-right{display:flex;align-items:center;gap:16px;}
-.tb-sair{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:6px 14px;border-radius:6px;font-size:11px;cursor:pointer;font-family:inherit;}
-.tb-sair:hover{border-color:rgba(255,255,255,.5);color:#fff;}
-
 .tabs{background:#fff;border-bottom:1px solid var(--borda);padding:0 32px;display:flex;gap:0;}
 .tab{padding:14px 20px;font-size:12px;font-weight:600;color:var(--claro);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;}
 .tab:hover{color:var(--azul);}
 .tab.active{color:var(--azul);border-bottom-color:var(--azul);font-weight:700;}
-
-.content{padding:28px 32px;max-width:1100px;}
-
-/* STATS */
+.content{padding:28px 32px;max-width:1200px;}
 .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
 .stat{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:18px 20px;}
 .stat-num{font-size:28px;font-weight:800;margin-bottom:4px;}
 .stat-lbl{font-size:11px;color:var(--claro);}
-
-/* TABELA */
 .card{background:#fff;border:1px solid var(--borda);border-radius:14px;overflow:hidden;margin-bottom:20px;}
 .card-head{padding:16px 22px;border-bottom:1px solid var(--borda);display:flex;align-items:center;justify-content:space-between;}
 .card-title{font-size:14px;font-weight:800;color:var(--azul);}
@@ -64,27 +35,23 @@ tr:hover td{background:#fafbff;}
 .badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:20px;}
 .badge.ativo{background:rgba(29,184,122,.12);color:var(--verde);}
 .badge.inativo{background:rgba(240,68,68,.1);color:var(--vermelho);}
-.td-actions{display:flex;gap:6px;}
+.td-actions{display:flex;gap:6px;flex-wrap:wrap;}
 .btn-sm{background:none;border:1.5px solid var(--borda);padding:5px 11px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--medio);transition:all .16s;}
 .btn-sm:hover{border-color:var(--azul);color:var(--azul);}
 .btn-sm.danger{border-color:rgba(240,68,68,.3);color:var(--vermelho);}
 .btn-sm.danger:hover{background:rgba(240,68,68,.08);}
 .btn-sm.success{border-color:rgba(29,184,122,.3);color:var(--verde);}
 .btn-sm.success:hover{background:rgba(29,184,122,.08);}
-
-/* BOTOES */
-.btn-primary{background:var(--azul);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .18s;}
+.btn-primary{background:var(--azul);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
 .btn-primary:hover{background:var(--azul-medio);}
 .btn-gold{background:var(--dourado);color:var(--azul);border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
 .btn-gold:hover{background:#ffd98e;}
 .btn-ghost{background:transparent;color:var(--medio);border:1.5px solid var(--borda);padding:9px 18px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;}
 .btn-ghost:hover{border-color:var(--azul);color:var(--azul);}
 .btn-green{background:var(--verde);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-
-/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(12,19,61,.45);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:18px;padding:36px;width:100%;max-width:540px;position:relative;box-shadow:0 24px 64px rgba(12,19,61,.25);max-height:90vh;overflow-y:auto;}
+.modal{background:#fff;border-radius:18px;padding:36px;width:100%;max-width:560px;position:relative;box-shadow:0 24px 64px rgba(12,19,61,.25);max-height:90vh;overflow-y:auto;}
 .modal-close{position:absolute;top:18px;right:18px;background:var(--fundo);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;color:var(--medio);}
 .modal-close:hover{background:var(--borda);}
 .modal-title{font-size:18px;font-weight:800;color:var(--azul);margin-bottom:4px;}
@@ -98,181 +65,121 @@ tr:hover td{background:#fafbff;}
 .inp::placeholder{color:var(--claro);}
 .sel{appearance:none;cursor:pointer;}
 .modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;}
-.section-head{display:flex;align-items:center;gap:8px;padding:12px 18px;background:rgba(12,19,61,.03);border-bottom:1px solid var(--borda);font-size:11px;font-weight:700;color:var(--azul);letter-spacing:.08em;text-transform:uppercase;}
-
-/* RESERVAS */
-.rv-partner{font-weight:700;color:var(--azul);}
-.rv-evento{font-size:11px;color:var(--claro);}
-
-/* VAZIO */
+.section-head{padding:12px 18px;background:rgba(12,19,61,.03);border-bottom:1px solid var(--borda);font-size:11px;font-weight:700;color:var(--azul);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
 .vazio{text-align:center;padding:40px;color:var(--claro);font-size:13px;}
-
-/* SPINNER */
-.spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(12,19,61,.15);border-top-color:var(--azul);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
-.spinner.w{border-color:rgba(255,255,255,.3);border-top-color:#fff;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* TOAST */
+.mat-desc{background:var(--fundo);padding:14px;border-radius:8px;font-size:13px;line-height:1.7;margin-top:8px;max-height:200px;overflow-y:auto;}
 .toast{position:fixed;bottom:24px;right:24px;background:var(--azul);color:#fff;padding:12px 22px;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;box-shadow:0 8px 32px rgba(12,19,61,.25);opacity:0;transform:translateY(10px);transition:all .3s;z-index:600;pointer-events:none;}
 .toast.show{opacity:1;transform:translateY(0);}
-
 .page{display:none;}
 .page.active{display:block;}
 </style>
 </head>
 <body>
 
-<!-- LOGIN REMOVED -->
-<div id="tela-login" style="display:none!important;">
-  <div class="login-box">
-    <div class="login-logo">
-      <div class="login-badge">GATUA</div>
-      <div class="login-brand">Admin</div>
+<div class="modal-overlay" id="modal-partner">
+  <div class="modal">
+    <button class="modal-close" onclick="fecharModal('modal-partner')">✕</button>
+    <div class="modal-title" id="mp-title">Novo Partner</div>
+    <div class="modal-sub" id="mp-sub">Preencha os dados para cadastrar um novo partner.</div>
+    <div class="fg">
+      <div class="field full"><label class="label">Nome da Empresa *</label><input class="inp" id="p-empresa" placeholder="Ex: Agro Soluções Ltda"/></div>
+      <div class="field full" id="field-email"><label class="label">E-mail de acesso *</label><input class="inp" id="p-email" type="email" placeholder="email@empresa.com"/></div>
+      <div class="field full" id="field-senha"><label class="label">Senha de acesso *</label><input class="inp" id="p-senha" type="text" placeholder="Senha que o partner vai usar"/></div>
+      <div class="field"><label class="label">Vigência</label><input class="inp" id="p-vigencia" placeholder="Jan/2026 a Jan/2027"/></div>
+      <div class="field"><label class="label">Próxima Revisão</label><input class="inp" id="p-revisao" placeholder="Abr/2026"/></div>
+      <div class="field full"><label class="label">Valor</label><input class="inp" id="p-valor" placeholder="R$ 2.000/mês"/></div>
     </div>
-    <div class="login-admin">🔒 Acesso Restrito</div>
-    <div class="login-title">Painel Administrativo</div>
-    <div class="login-desc">Uso exclusivo da equipe Gatua.</div>
-    <div class="login-field">
-      <label class="login-label">Senha de acesso</label>
-      <input class="login-inp" id="admin-senha" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()"/>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="fecharModal('modal-partner')">Cancelar</button>
+      <button class="btn-primary" id="btn-salvar-partner" onclick="salvarPartner()">Cadastrar Partner</button>
     </div>
-    <button class="login-btn" onclick="fazerLogin()">Entrar</button>
-    <div class="login-erro" id="login-erro">Senha incorreta.</div>
   </div>
 </div>
 
-<!-- APP -->
-<div id="tela-app" style="display:block;">
+<div class="modal-overlay" id="modal-reservas">
+  <div class="modal" style="max-width:700px;">
+    <button class="modal-close" onclick="fecharModal('modal-reservas')">✕</button>
+    <div class="modal-title" id="mr-title">Reservas</div>
+    <div class="modal-sub" id="mr-sub"></div>
+    <div id="mr-conteudo"></div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="fecharModal('modal-reservas')">Fechar</button>
+      <button class="btn-green" onclick="exportarCSV()">⬇ Exportar CSV</button>
+    </div>
+  </div>
+</div>
 
-  <!-- MODAL NOVO/EDITAR PARTNER -->
-  <div class="modal-overlay" id="modal-partner">
-    <div class="modal">
-      <button class="modal-close" onclick="fecharModal('modal-partner')">✕</button>
-      <div class="modal-title" id="modal-partner-title">Novo Partner</div>
-      <div class="modal-sub" id="modal-partner-sub">Preencha os dados para cadastrar um novo partner no portal.</div>
-      <div class="fg">
-        <div class="field full"><label class="label">Nome da Empresa *</label><input class="inp" id="p-empresa" placeholder="Ex: Agro Soluções Ltda"/></div>
-        <div class="field full"><label class="label">E-mail de acesso *</label><input class="inp" id="p-email" type="email" placeholder="email@empresa.com"/></div>
-        <div class="field full" id="field-senha"><label class="label">Senha de acesso *</label><input class="inp" id="p-senha" type="text" placeholder="Senha que o partner vai usar"/></div>
-        <div class="field"><label class="label">Vigência</label><input class="inp" id="p-vigencia" placeholder="Jan/2026 a Jan/2027"/></div>
-        <div class="field"><label class="label">Próxima Revisão</label><input class="inp" id="p-revisao" placeholder="Abr/2026"/></div>
-        <div class="field"><label class="label">Valor</label><input class="inp" id="p-valor" placeholder="R$ 2.000/mês"/></div>
-      </div>
-      <div class="modal-foot">
-        <button class="btn-ghost" onclick="fecharModal('modal-partner')">Cancelar</button>
-        <button class="btn-primary" id="btn-salvar-partner" onclick="salvarPartner()">Cadastrar Partner</button>
-      </div>
+<div class="modal-overlay" id="modal-material">
+  <div class="modal" style="max-width:620px;">
+    <button class="modal-close" onclick="fecharModal('modal-material')">✕</button>
+    <div class="modal-title" id="mm-title">Material</div>
+    <div class="modal-sub" id="mm-sub"></div>
+    <div id="mm-conteudo"></div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="fecharModal('modal-material')">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="tb-left">
+    <div class="tb-badge">GATUA</div>
+    <div><div class="tb-name">Painel Admin</div><div class="tb-admin">Uso exclusivo</div></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="irTab('dashboard',this)">Dashboard</div>
+  <div class="tab" onclick="irTab('partners',this)">Partners</div>
+  <div class="tab" onclick="irTab('reservas',this)">Todas as Reservas</div>
+  <div class="tab" onclick="irTab('materiais',this)">Materiais Enviados</div>
+</div>
+
+<div class="content">
+
+  <div class="page active" id="pg-dashboard">
+    <div class="stats">
+      <div class="stat"><div class="stat-num" style="color:var(--azul);" id="st-partners">—</div><div class="stat-lbl">Partners ativos</div></div>
+      <div class="stat"><div class="stat-num" style="color:var(--verde);" id="st-reservas">—</div><div class="stat-lbl">Reservas feitas</div></div>
+      <div class="stat"><div class="stat-num" style="color:var(--dourado-esc);" id="st-ingressos">—</div><div class="stat-lbl">Ingressos utilizados</div></div>
+      <div class="stat"><div class="stat-num" style="color:var(--claro);" id="st-materiais">—</div><div class="stat-lbl">Materiais enviados</div></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Reservas por Evento</div></div>
+      <table><thead><tr><th>Evento</th><th>Data</th><th>Reservas</th><th>Participantes</th></tr></thead>
+      <tbody id="tb-ev-resumo"></tbody></table>
     </div>
   </div>
 
-  <!-- MODAL MATERIAL DETALHE -->
-  <div class="modal-overlay" id="modal-material">
-    <div class="modal" style="max-width:600px;">
-      <button class="modal-close" onclick="fecharModal('modal-material')">✕</button>
-      <div class="modal-title" id="modal-partner-title">Material</div>
-      <div class="modal-sub" id="modal-partner-sub"></div>
-      <div id="modal-conteudo-mat"></div>
-      <div class="modal-foot" style="margin-top:20px;"><button class="btn-ghost" onclick="fecharModal('modal-material')">Fechar</button></div>
+  <div class="page" id="pg-partners">
+    <div class="card">
+      <div class="card-head"><div class="card-title">Partners Cadastrados</div><button class="btn-gold" onclick="abrirNovoPartner()">+ Novo Partner</button></div>
+      <table><thead><tr><th>Empresa</th><th>E-mail</th><th>Vigência</th><th>Ingressos</th><th>Status</th><th>Ações</th></tr></thead>
+      <tbody id="tb-partners"></tbody></table>
     </div>
   </div>
 
-  <!-- MODAL RESERVAS DO PARTNER -->
-  <div class="modal-overlay" id="modal-reservas">
-    <div class="modal" style="max-width:680px;">
-      <button class="modal-close" onclick="fecharModal('modal-reservas')">✕</button>
-      <div class="modal-title" id="modal-rv-title">Reservas</div>
-      <div class="modal-sub" id="modal-rv-sub"></div>
-      <div id="modal-rv-conteudo"></div>
-      <div class="modal-foot">
-        <button class="btn-ghost" onclick="fecharModal('modal-reservas')">Fechar</button>
-        <button class="btn-green" onclick="exportarCSV()">⬇ Exportar CSV</button>
-      </div>
+  <div class="page" id="pg-reservas">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:800;color:var(--azul);">Todas as Reservas</div>
+      <button class="btn-green" onclick="exportarTodasCSV()">⬇ Exportar CSV</button>
+    </div>
+    <div class="card">
+      <table><thead><tr><th>Partner</th><th>Participante</th><th>Cargo / Empresa</th><th>Evento</th><th>E-mail</th><th>Telefone</th><th>CPF</th></tr></thead>
+      <tbody id="tb-todas-reservas"></tbody></table>
     </div>
   </div>
 
-  <div class="topbar">
-    <div class="tb-left">
-      <div class="tb-badge">GATUA</div>
-      <div>
-        <div class="tb-name">Painel Admin</div>
-        <div class="tb-admin">Uso exclusivo</div>
-      </div>
+  <div class="page" id="pg-materiais">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:800;color:var(--azul);">Materiais para Divulgação</div>
     </div>
-    <div class="tb-right">
-      <button class="tb-sair" onclick="sair()">Sair</button>
+    <div class="card">
+      <table><thead><tr><th>Partner</th><th>Título</th><th>Tipo</th><th>Canal</th><th>Responsável</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
+      <tbody id="tb-materiais"></tbody></table>
     </div>
   </div>
 
-  <div class="tabs">
-    <div class="tab active" onclick="irTab('dashboard',this)">Dashboard</div>
-    <div class="tab" onclick="irTab('partners',this)">Partners</div>
-    <div class="tab" onclick="irTab('reservas',this)">Todas as Reservas</div>
-    <div class="tab" onclick="irTab('materiais',this)">Materiais Enviados</div>
-  </div>
-
-  <div class="content">
-
-    <!-- DASHBOARD -->
-    <div class="page active" id="pg-dashboard">
-      <div class="stats">
-        <div class="stat"><div class="stat-num" style="color:var(--azul);" id="st-partners">—</div><div class="stat-lbl">Partners ativos</div></div>
-        <div class="stat"><div class="stat-num" style="color:var(--verde);" id="st-reservas">—</div><div class="stat-lbl">Reservas feitas</div></div>
-        <div class="stat"><div class="stat-num" style="color:var(--dourado-esc);" id="st-ingressos">—</div><div class="stat-lbl">Ingressos utilizados</div></div>
-        <div class="stat"><div class="stat-num" style="color:var(--claro);" id="st-disponiveis">—</div><div class="stat-lbl">Ingressos disponíveis</div></div>
-      </div>
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">Reservas por Evento</div>
-        </div>
-        <table>
-          <thead><tr><th>Evento</th><th>Data</th><th>Reservas</th><th>Participantes</th></tr></thead>
-          <tbody id="tb-eventos-resumo"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- PARTNERS -->
-    <div class="page" id="pg-partners">
-      <div class="card">
-        <div class="card-head">
-          <div class="card-title">Partners Cadastrados</div>
-          <button class="btn-gold" onclick="abrirNovoPartner()">+ Novo Partner</button>
-        </div>
-        <table>
-          <thead><tr><th>Empresa</th><th>E-mail</th><th>Vigência</th><th>Ingressos</th><th>Status</th><th>Ações</th></tr></thead>
-          <tbody id="tb-partners"></tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- RESERVAS -->
-    <div class="page" id="pg-reservas">
-      <div class="card-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0;">
-        <div class="card-title" style="font-size:16px;">Todas as Reservas</div>
-        <button class="btn-green" onclick="exportarTodasCSV()">⬇ Exportar todas CSV</button>
-      </div>
-      <div class="card">
-        <table>
-          <thead><tr><th>Partner</th><th>Participante</th><th>Cargo / Empresa</th><th>Evento</th><th>E-mail</th><th>Telefone</th><th>CPF</th></tr></thead>
-          <tbody id="tb-todas-reservas"></tbody>
-        </table>
-      </div>
-    </div>
-
-
-    <!-- MATERIAIS -->
-    <div class="page" id="pg-materiais">
-      <div class="card-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0;">
-        <div class="card-title" style="font-size:16px;">Materiais para Divulgação</div>
-      </div>
-      <div class="card">
-        <table>
-          <thead><tr><th>Partner</th><th>Título</th><th>Tipo</th><th>Canal</th><th>Responsável</th><th>Data</th><th>Status</th><th>Ação</th></tr></thead>
-          <tbody id="tb-materiais"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
 </div>
 
 <div class="toast" id="toast-el"></div>
@@ -283,8 +190,7 @@ var _sb = window.supabase.createClient(
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzbmNrdWRoanhjc215aWZzZWFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTExMjYsImV4cCI6MjA4ODYyNzEyNn0.jAmPEPB9scyKH67rfW3fA5Sw4hL4fRgf_WrOkimQjPs'
 );
 
-var SENHA_ADMIN = 'Gatua2026';
-var EVENTOS_NOMES = [
+var EVENTOS = [
   {nome:'Gatua Meeting - TI do Futuro: A Nova Gestão de TI', data:'21/05/2026'},
   {nome:'Gatua Meeting - Campo Inteligente: Tecnologia na Gestão Agrícola', data:'20/08/2026'},
   {nome:'Gatua Meeting - Gestão e Tecnologia no Agro: Da Gestão à IA', data:'17/09/2026'},
@@ -293,37 +199,34 @@ var EVENTOS_NOMES = [
 
 var todosPartners = [];
 var todasReservas = [];
+var todosMateriais = [];
 var editandoId = null;
 var reservasModal = [];
 
-function fazerLogin(){ carregarTudo(); }
-
-function sair(){ window.location.reload(); }
-
-async function carregarTudo(){
+async function carregarTudo() {
   var pr = await _sb.from('partners').select('*').order('created_at',{ascending:false});
   var rv = await _sb.from('reservas').select('*').order('created_at',{ascending:true});
+  var mt = await _sb.from('divulgacoes').select('*').order('created_at',{ascending:false});
   todosPartners = pr.data || [];
   todasReservas = rv.data || [];
+  todosMateriais = mt.data || [];
   renderDashboard();
   renderPartners();
   renderTodasReservas();
+  renderMateriais();
 }
 
-function reservasPorPartner(pid){ return todasReservas.filter(function(r){return r.partner_id===pid;}); }
+function reservasPorPartner(pid) { return todasReservas.filter(function(r){return r.partner_id===pid;}); }
 
-function renderDashboard(){
-  var ativos = todosPartners.filter(function(p){return p.ativo !== false;}).length;
-  var totalUsados = todasReservas.length;
-  var totalDisp = (ativos * 12) - totalUsados;
+function renderDashboard() {
+  var ativos = todosPartners.filter(function(p){return p.ativo!==false;}).length;
   document.getElementById('st-partners').textContent = ativos;
   document.getElementById('st-reservas').textContent = todasReservas.length;
-  document.getElementById('st-ingressos').textContent = totalUsados;
-  document.getElementById('st-disponiveis').textContent = totalDisp;
-
-  var tbody = document.getElementById('tb-eventos-resumo');
+  document.getElementById('st-ingressos').textContent = todasReservas.length;
+  document.getElementById('st-materiais').textContent = todosMateriais.length;
+  var tbody = document.getElementById('tb-ev-resumo');
   tbody.innerHTML = '';
-  EVENTOS_NOMES.forEach(function(ev){
+  EVENTOS.forEach(function(ev){
     var res = todasReservas.filter(function(r){return r.evento_nome===ev.nome;});
     var nomes = res.map(function(r){return r.nome_participante;}).join(', ') || '—';
     var tr = document.createElement('tr');
@@ -332,245 +235,206 @@ function renderDashboard(){
   });
 }
 
-function renderPartners(){
+function renderPartners() {
   var tbody = document.getElementById('tb-partners');
   tbody.innerHTML = '';
   if(!todosPartners.length){tbody.innerHTML='<tr><td colspan="6" class="vazio">Nenhum partner cadastrado.</td></tr>';return;}
   todosPartners.forEach(function(p){
-    var ativo = p.ativo !== false;
+    var ativo = p.ativo!==false;
+    var usados = reservasPorPartner(p.id).length;
     var tr = document.createElement('tr');
     tr.innerHTML =
       '<td><strong>'+p.nome_empresa+'</strong></td>'+
-      '<td style="color:var(--claro);">'+p.email_acesso+'</td>'+
-      '<td>'+p.vigencia+'</td>'+
-      '<td>'+(reservasPorPartner(p.id).length)+'/15</td>'+
+      '<td style="color:var(--claro);">'+(p.email_acesso||'—')+'</td>'+
+      '<td>'+(p.vigencia||'—')+'</td>'+
+      '<td>'+usados+'/12</td>'+
       '<td><span class="badge '+(ativo?'ativo':'inativo')+'">'+(ativo?'Ativo':'Inativo')+'</span></td>'+
       '<td><div class="td-actions">'+
-        '<button class="btn-sm" onclick="verReservas(\''+p.id+'\',\''+p.nome_empresa+'\')">Reservas</button>'+
-        '<button class="btn-sm" onclick="editarPartner(\''+p.id+'\')">Editar</button>'+
-        (ativo
-          ? '<button class="btn-sm danger" onclick="toggleAtivo(\''+p.id+'\',false)">Desativar</button>'
-          : '<button class="btn-sm success" onclick="toggleAtivo(\''+p.id+'\',true)">Reativar</button>')+
+        '<button class="btn-sm" onclick="verReservas(''+p.id+'',''+p.nome_empresa+'')">Reservas</button>'+
+        '<button class="btn-sm" onclick="editarPartner(''+p.id+'')">Editar</button>'+
+        (ativo?'<button class="btn-sm danger" onclick="toggleAtivo(''+p.id+'',false)">Desativar</button>':
+                '<button class="btn-sm success" onclick="toggleAtivo(''+p.id+'',true)">Reativar</button>')+
       '</div></td>';
     tbody.appendChild(tr);
   });
 }
 
-function renderTodasReservas(){
+function renderTodasReservas() {
   var tbody = document.getElementById('tb-todas-reservas');
   tbody.innerHTML = '';
   if(!todasReservas.length){tbody.innerHTML='<tr><td colspan="7" class="vazio">Nenhuma reserva ainda.</td></tr>';return;}
   todasReservas.forEach(function(r){
-    var partner = todosPartners.find(function(p){return p.id===r.partner_id;});
-    var pNome = partner ? partner.nome_empresa : '—';
+    var p = todosPartners.find(function(x){return x.id===r.partner_id;});
     var tr = document.createElement('tr');
     tr.innerHTML =
-      '<td><span class="rv-partner">'+pNome+'</span></td>'+
+      '<td><strong>'+(p?p.nome_empresa:'—')+'</strong></td>'+
       '<td><strong>'+r.nome_participante+'</strong></td>'+
       '<td style="font-size:11px;">'+r.cargo+' · '+r.empresa+'</td>'+
-      '<td><span class="rv-evento">'+r.evento_nome+'</span></td>'+
+      '<td style="font-size:11px;">'+r.evento_nome+'</td>'+
       '<td style="color:var(--claro);">'+r.email+'</td>'+
       '<td style="color:var(--claro);">'+r.telefone+'</td>'+
-      '<td style="color:var(--claro);">'+r.cpf+'</td>';
+      '<td style="color:var(--claro);">'+(r.cpf||'—')+'</td>';
     tbody.appendChild(tr);
   });
 }
 
-function abrirNovoPartner(){
+function renderMateriais() {
+  var tbody = document.getElementById('tb-materiais');
+  tbody.innerHTML = '';
+  if(!todosMateriais.length){tbody.innerHTML='<tr><td colspan="8" class="vazio">Nenhum material enviado ainda.</td></tr>';return;}
+  todosMateriais.forEach(function(m){
+    var cor = m.status==='Aprovado'?'var(--verde)':m.status==='Recusado'?'var(--vermelho)':'var(--laranja)';
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td><strong>'+(m.partner_nome||'—')+'</strong></td>'+
+      '<td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+m.titulo+'">'+m.titulo+'</td>'+
+      '<td style="font-size:11px;color:var(--claro);">'+(m.tipo||'—')+'</td>'+
+      '<td style="font-size:11px;color:var(--claro);">'+(m.canal||'—')+'</td>'+
+      '<td style="font-size:11px;">'+m.responsavel+'<br><span style="color:var(--claro);">'+m.email+'</span></td>'+
+      '<td style="font-size:11px;color:var(--claro);">'+new Date(m.created_at).toLocaleDateString('pt-BR')+'</td>'+
+      '<td><span style="font-size:10px;font-weight:700;color:'+cor+';">'+m.status+'</span></td>'+
+      '<td><div class="td-actions">'+
+        '<button class="btn-sm" onclick="verMaterial(''+m.id+'')">Ver</button>'+
+        (m.status==='Pendente'?
+          '<button class="btn-sm success" onclick="mudarStatus(''+m.id+'','Aprovado')">Aprovar</button>'+
+          '<button class="btn-sm danger" onclick="mudarStatus(''+m.id+'','Recusado')">Recusar</button>':'')+'</div></td>';
+    tbody.appendChild(tr);
+  });
+}
+
+function verMaterial(id) {
+  var m = todosMateriais.find(function(x){return x.id===id;});
+  if(!m) return;
+  document.getElementById('mm-title').textContent = m.titulo;
+  document.getElementById('mm-sub').textContent = 'Enviado por '+m.partner_nome+' em '+new Date(m.created_at).toLocaleDateString('pt-BR');
+  document.getElementById('mm-conteudo').innerHTML =
+    '<div style="display:grid;gap:12px;font-size:13px;">'+
+    '<div><strong>Tipo:</strong> '+m.tipo+'</div>'+
+    '<div><strong>Canal:</strong> '+m.canal+'</div>'+
+    '<div><strong>Período sugerido:</strong> '+(m.periodo||'—')+'</div>'+
+    '<div><strong>Link:</strong> '+(m.link?'<a href="'+m.link+'" target="_blank" style="color:var(--azul);">'+m.link+'</a>':'—')+'</div>'+
+    '<div><strong>Responsável:</strong> '+m.responsavel+' · '+m.email+'</div>'+
+    '<div><strong>Descrição:</strong><div class="mat-desc">'+m.descricao+'</div></div>'+
+    '</div>';
+  document.getElementById('modal-material').classList.add('open');
+}
+
+async function mudarStatus(id, status) {
+  await _sb.from('divulgacoes').update({status:status}).eq('id',id);
+  toast(status==='Aprovado'?'✅ Material aprovado!':'❌ Material recusado.');
+  var m = todosMateriais.find(function(x){return x.id===id;});
+  if(m) m.status = status;
+  renderMateriais();
+}
+
+function abrirNovoPartner() {
   editandoId = null;
-  document.getElementById('modal-partner-title').textContent = 'Novo Partner';
-  document.getElementById('modal-partner-sub').textContent = 'Preencha os dados para cadastrar um novo partner.';
+  document.getElementById('mp-title').textContent = 'Novo Partner';
+  document.getElementById('mp-sub').textContent = 'Preencha os dados para cadastrar um novo partner.';
   document.getElementById('btn-salvar-partner').textContent = 'Cadastrar Partner';
   document.getElementById('field-senha').style.display = 'flex';
+  document.getElementById('field-email').style.display = 'flex';
   document.getElementById('p-empresa').value = '';
   document.getElementById('p-email').value = '';
   document.getElementById('p-senha').value = '';
   document.getElementById('p-vigencia').value = 'Jan/2026 a Jan/2027';
   document.getElementById('p-revisao').value = 'Abr/2026';
   document.getElementById('p-valor').value = 'R$ 2.000/mês';
-
   document.getElementById('modal-partner').classList.add('open');
 }
 
-function editarPartner(id){
+function editarPartner(id) {
   var p = todosPartners.find(function(x){return x.id===id;});
   if(!p) return;
   editandoId = id;
-  document.getElementById('modal-partner-title').textContent = 'Editar Partner';
-  document.getElementById('modal-partner-sub').textContent = 'Atualize os dados de '+p.nome_empresa+'.';
+  document.getElementById('mp-title').textContent = 'Editar — '+p.nome_empresa;
+  document.getElementById('mp-sub').textContent = 'Atualize os dados do partner.';
   document.getElementById('btn-salvar-partner').textContent = 'Salvar Alterações';
   document.getElementById('field-senha').style.display = 'none';
+  document.getElementById('field-email').style.display = 'none';
   document.getElementById('p-empresa').value = p.nome_empresa||'';
-  document.getElementById('p-email').value = p.email_acesso||'';
   document.getElementById('p-vigencia').value = p.vigencia||'';
   document.getElementById('p-revisao').value = p.proxima_revisao||'';
   document.getElementById('p-valor').value = p.valor||'';
-
   document.getElementById('modal-partner').classList.add('open');
 }
 
-async function salvarPartner(){
+async function salvarPartner() {
   var empresa = document.getElementById('p-empresa').value.trim();
-  var email   = document.getElementById('p-email').value.trim();
-  var senha   = document.getElementById('p-senha').value.trim();
-  var vigencia= document.getElementById('p-vigencia').value.trim();
+  var email = document.getElementById('p-email').value.trim();
+  var senha = document.getElementById('p-senha').value.trim();
+  var vigencia = document.getElementById('p-vigencia').value.trim();
   var revisao = document.getElementById('p-revisao').value.trim();
-  var valor   = document.getElementById('p-valor').value.trim();
-
-
+  var valor = document.getElementById('p-valor').value.trim();
   if(!empresa){toast('⚠️ Informe o nome da empresa.');return;}
-
   var btn = document.getElementById('btn-salvar-partner');
-  btn.innerHTML='<span class="spinner w"></span>Salvando...';btn.disabled=true;
-
-  try{
-    if(editandoId){
-      // EDITAR
-      var upd = await _sb.from('partners').update({
-        nome_empresa:empresa, email_acesso:email,
-        vigencia:vigencia, proxima_revisao:revisao, valor:valor,
-      }).eq('id',editandoId);
-      if(upd.error){toast('❌ Erro ao salvar: '+upd.error.message);btn.innerHTML='Salvar Alterações';btn.disabled=false;return;}
-      toast('✅ Partner atualizado com sucesso!');
+  btn.innerHTML = 'Salvando...'; btn.disabled = true;
+  try {
+    if(editandoId) {
+      await _sb.from('partners').update({nome_empresa:empresa,vigencia:vigencia,proxima_revisao:revisao,valor:valor}).eq('id',editandoId);
+      toast('✅ Partner atualizado!');
     } else {
-      // NOVO — cria auth user via Admin API não disponível no anon key
-      // Usamos signUp para criar o usuário (funciona com confirmação desabilitada)
       if(!email||!senha){toast('⚠️ Informe e-mail e senha.');btn.innerHTML='Cadastrar Partner';btn.disabled=false;return;}
-      var signup = await _sb.auth.signUp({email:email, password:senha});
-      if(signup.error){toast('❌ Erro ao criar login: '+signup.error.message);btn.innerHTML='Cadastrar Partner';btn.disabled=false;return;}
-      var uid = signup.data.user.id;
-      var ins = await _sb.from('partners').insert({
-        id:uid, nome_empresa:empresa, email_acesso:email,
-        vigencia:vigencia, proxima_revisao:revisao, valor:valor,
-        ingressos_total:15, ingressos_disponiveis:15, ingressos_utilizados:0,
-        ativo:true
-      });
-      if(ins.error){toast('❌ Erro ao cadastrar: '+ins.error.message);btn.innerHTML='Cadastrar Partner';btn.disabled=false;return;}
+      var su = await _sb.auth.signUp({email:email,password:senha});
+      if(su.error){toast('❌ '+su.error.message);btn.innerHTML='Cadastrar Partner';btn.disabled=false;return;}
+      var uid = su.data.user.id;
+      await _sb.from('partners').insert({id:uid,nome_empresa:empresa,email_acesso:email,vigencia:vigencia,proxima_revisao:revisao,valor:valor,ingressos_total:12,ingressos_disponiveis:12,ingressos_utilizados:0,ativo:true});
       toast('✅ Partner cadastrado! Login: '+email+' / Senha: '+senha);
     }
     fecharModal('modal-partner');
     await carregarTudo();
-  } catch(e){
-    toast('❌ Erro inesperado.');
-  }
+  } catch(e) { toast('❌ Erro: '+e.message); }
   btn.innerHTML = editandoId?'Salvar Alterações':'Cadastrar Partner';
-  btn.disabled=false;
+  btn.disabled = false;
 }
 
-async function toggleAtivo(id, ativo){
+async function toggleAtivo(id, ativo) {
   await _sb.from('partners').update({ativo:ativo}).eq('id',id);
-  toast(ativo ? '✅ Partner reativado.' : '⚠️ Partner desativado.');
+  toast(ativo?'✅ Partner reativado.':'⚠️ Partner desativado.');
   await carregarTudo();
 }
 
-function verReservas(partnerId, nomeEmpresa){
+function verReservas(partnerId, nomeEmpresa) {
   reservasModal = todasReservas.filter(function(r){return r.partner_id===partnerId;});
-  document.getElementById('modal-rv-title').textContent = 'Reservas — '+nomeEmpresa;
-  document.getElementById('modal-rv-sub').textContent = reservasModal.length+' reserva'+(reservasModal.length!==1?'s':'')+' registrada'+(reservasModal.length!==1?'s':'');
+  document.getElementById('mr-title').textContent = 'Reservas — '+nomeEmpresa;
+  document.getElementById('mr-sub').textContent = reservasModal.length+' reserva'+(reservasModal.length!==1?'s':'')+' registrada'+(reservasModal.length!==1?'s':'');
   var html = '';
-  if(!reservasModal.length){
-    html = '<div class="vazio">Nenhuma reserva ainda.</div>';
-  } else {
-    EVENTOS_NOMES.forEach(function(ev){
-      var res = reservasModal.filter(function(r){return r.evento_nome===ev.nome;});
-      html += '<div class="section-head">'+ev.nome+' · '+ev.data+' <span style="margin-left:auto;font-weight:400;color:var(--claro);">'+res.length+'/3 vagas</span></div>';
-      if(!res.length){
-        html += '<div style="padding:12px 18px;font-size:12px;color:var(--claro);">Nenhuma reserva para este evento.</div>';
-      } else {
-        res.forEach(function(r,i){
-          html += '<div style="padding:12px 18px;border-bottom:1px solid var(--borda);font-size:12px;">'+
-            '<strong>'+(i+1)+'. '+r.nome_participante+'</strong> — '+r.cargo+' · '+r.empresa+'<br>'+
-            '<span style="color:var(--claro);">'+r.email+' · '+r.telefone+' · CPF: '+r.cpf+'</span>'+
-          '</div>';
-        });
-      }
-    });
-  }
-  document.getElementById('modal-rv-conteudo').innerHTML = html;
+  EVENTOS.forEach(function(ev){
+    var res = reservasModal.filter(function(r){return r.evento_nome===ev.nome;});
+    html += '<div class="section-head">'+ev.nome+' · '+ev.data+'<span style="font-weight:400;color:var(--claro);">'+res.length+'/3 vagas</span></div>';
+    if(!res.length){html+='<div style="padding:12px 18px;font-size:12px;color:var(--claro);">Nenhuma reserva.</div>';}
+    else{res.forEach(function(r,i){html+='<div style="padding:12px 18px;border-bottom:1px solid var(--borda);font-size:12px;"><strong>'+(i+1)+'. '+r.nome_participante+'</strong> — '+r.cargo+' · '+r.empresa+'<br><span style="color:var(--claro);">'+r.email+' · '+r.telefone+(r.cpf?' · CPF: '+r.cpf:'')+'</span></div>';});}
+  });
+  document.getElementById('mr-conteudo').innerHTML = html || '<div class="vazio">Nenhuma reserva ainda.</div>';
   document.getElementById('modal-reservas').classList.add('open');
 }
 
-
-function renderMateriais(){
-  var tbody=document.getElementById('tb-materiais');
-  if(!tbody) return;
-  tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--claro);">Carregando...</td></tr>';
-  _sb.from('divulgacoes').select('*').order('created_at',{ascending:false}).then(function(res){
-    var rows=res.data||[];
-    if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="vazio">Nenhum material enviado ainda.</td></tr>';return;}
-    tbody.innerHTML='';
-    rows.forEach(function(m){
-      var tr=document.createElement('tr');
-      var statusColor=m.status==='Aprovado'?'var(--verde)':m.status==='Recusado'?'var(--vermelho)':'var(--laranja)';
-      tr.innerHTML=
-        '<td><strong>'+(m.partner_nome||'—')+'</strong></td>'+
-        '<td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+m.titulo+'">'+m.titulo+'</td>'+
-        '<td style="font-size:11px;color:var(--claro);">'+m.tipo+'</td>'+
-        '<td style="font-size:11px;color:var(--claro);">'+m.canal+'</td>'+
-        '<td style="font-size:11px;">'+m.responsavel+'<br><span style="color:var(--claro);">'+m.email+'</span></td>'+
-        '<td style="font-size:11px;color:var(--claro);">'+new Date(m.created_at).toLocaleDateString('pt-BR')+'</td>'+
-        '<td><span style="font-size:10px;font-weight:700;color:'+statusColor+';">'+m.status+'</span></td>'+
-        '<td><div class="td-actions">'+
-          '<button class="btn-sm" onclick="verMaterial(''+m.id+'')">Ver</button>'+
-          (m.status==='Pendente'?
-            '<button class="btn-sm success" onclick="mudarStatus(''+m.id+'','Aprovado')">Aprovar</button>'+
-            '<button class="btn-sm danger" onclick="mudarStatus(''+m.id+'','Recusado')">Recusar</button>':'')+
-        '</div></td>';
-      tbody.appendChild(tr);
-    });
-  });
-}
-
-function verMaterial(id){
-  _sb.from('divulgacoes').select('*').eq('id',id).single().then(function(res){
-    if(!res.data) return;
-    var m=res.data;
-    document.getElementById('modal-partner-title').textContent='Material: '+m.titulo;
-    document.getElementById('modal-partner-sub').textContent='Enviado por '+m.partner_nome+' em '+new Date(m.created_at).toLocaleDateString('pt-BR');
-    document.getElementById('modal-conteudo-mat').innerHTML=
-      '<div style="display:grid;gap:12px;">'+
-      '<div><strong>Tipo:</strong> '+m.tipo+'</div>'+
-      '<div><strong>Canal:</strong> '+m.canal+'</div>'+
-      '<div><strong>Período:</strong> '+(m.periodo||'—')+'</div>'+
-      '<div><strong>Link:</strong> '+(m.link?'<a href="'+m.link+'" target="_blank">'+m.link+'</a>':'—')+'</div>'+
-      '<div><strong>Descrição:</strong><br><div style="background:var(--fundo);padding:12px;border-radius:8px;margin-top:6px;font-size:13px;line-height:1.6;">'+m.descricao+'</div></div>'+
-      '<div><strong>Responsável:</strong> '+m.responsavel+' · '+m.email+'</div>'+
-      '</div>';
-    document.getElementById('modal-material').classList.add('open');
-  });
-}
-
-async function mudarStatus(id, status){
-  await _sb.from('divulgacoes').update({status:status}).eq('id',id);
-  toast(status==='Aprovado'?'✅ Material aprovado!':'❌ Material recusado.');
-  renderMateriais();
-}
-
-function exportarCSV(){
+function exportarCSV() {
   if(!reservasModal.length){toast('Nenhuma reserva para exportar.');return;}
-  var linhas = [['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
+  var linhas=[['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
   reservasModal.forEach(function(r){
-    var p = todosPartners.find(function(x){return x.id===r.partner_id;});
-    linhas.push([p?p.nome_empresa:'',r.nome_participante,r.cargo,r.empresa,r.evento_nome,r.email,r.telefone,r.cpf]);
+    var p=todosPartners.find(function(x){return x.id===r.partner_id;});
+    linhas.push([p?p.nome_empresa:'',r.nome_participante,r.cargo,r.empresa,r.evento_nome,r.email,r.telefone,r.cpf||'']);
   });
-  downloadCSV(linhas, 'reservas-partner.csv');
+  downloadCSV(linhas,'reservas-partner.csv');
 }
 
-function exportarTodasCSV(){
+function exportarTodasCSV() {
   if(!todasReservas.length){toast('Nenhuma reserva ainda.');return;}
-  var linhas = [['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
+  var linhas=[['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
   todasReservas.forEach(function(r){
-    var p = todosPartners.find(function(x){return x.id===r.partner_id;});
-    linhas.push([p?p.nome_empresa:'',r.nome_participante,r.cargo,r.empresa,r.evento_nome,r.email,r.telefone,r.cpf]);
+    var p=todosPartners.find(function(x){return x.id===r.partner_id;});
+    linhas.push([p?p.nome_empresa:'',r.nome_participante,r.cargo,r.empresa,r.evento_nome,r.email,r.telefone,r.cpf||'']);
   });
-  downloadCSV(linhas, 'todas-reservas-gatua.csv');
+  downloadCSV(linhas,'todas-reservas-gatua.csv');
 }
 
-function downloadCSV(linhas, nome){
-  var csv = linhas.map(function(l){return l.map(function(c){return '"'+(c||'').replace(/"/g,'""')+'"';}).join(',');}).join('\n');
-  var blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
+function downloadCSV(linhas, nome) {
+  var csv=linhas.map(function(l){return l.map(function(c){return '"'+(c||'').replace(/"/g,'""')+'"';}).join(',');}).join('
+');
+  var blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');
   a.href=url;a.download=nome;a.click();
   URL.revokeObjectURL(url);
   toast('✅ CSV exportado!');
@@ -578,18 +442,19 @@ function downloadCSV(linhas, nome){
 
 function fecharModal(id){document.getElementById(id).classList.remove('open');}
 
-function irTab(id, el){
+function irTab(id, el) {
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.getElementById('pg-'+id).classList.add('active');
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
   el.classList.add('active');
 }
 
-function toast(msg){
+function toast(msg) {
   var t=document.getElementById('toast-el');
   t.textContent=msg;t.classList.add('show');
   setTimeout(function(){t.classList.remove('show');},4000);
 }
+
 carregarTudo();
 </script>
 </body>
