@@ -322,7 +322,6 @@ async function carregarTudo(){
   renderDashboard();
   renderPartners();
   renderTodasReservas();
-  renderMateriais();
 }
 
 function reservasPorPartner(pid){ return todasReservas.filter(function(r){return r.partner_id===pid;}); }
@@ -594,7 +593,6 @@ function downloadCSV(linhas, nome){
 function fecharModal(id){document.getElementById(id).classList.remove('open');}
 
 function irTab(id, el){
-  if(id==='materiais') renderMateriais();
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.getElementById('pg-'+id).classList.add('active');
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
