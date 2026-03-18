@@ -165,6 +165,17 @@ tr:hover td{background:#fafbff;}
     </div>
   </div>
 
+  <!-- MODAL MATERIAL DETALHE -->
+  <div class="modal-overlay" id="modal-material">
+    <div class="modal" style="max-width:600px;">
+      <button class="modal-close" onclick="fecharModal('modal-material')">✕</button>
+      <div class="modal-title" id="modal-partner-title">Material</div>
+      <div class="modal-sub" id="modal-partner-sub"></div>
+      <div id="modal-conteudo-mat"></div>
+      <div class="modal-foot" style="margin-top:20px;"><button class="btn-ghost" onclick="fecharModal('modal-material')">Fechar</button></div>
+    </div>
+  </div>
+
   <!-- MODAL RESERVAS DO PARTNER -->
   <div class="modal-overlay" id="modal-reservas">
     <div class="modal" style="max-width:680px;">
@@ -196,6 +207,7 @@ tr:hover td{background:#fafbff;}
     <div class="tab active" onclick="irTab('dashboard',this)">Dashboard</div>
     <div class="tab" onclick="irTab('partners',this)">Partners</div>
     <div class="tab" onclick="irTab('reservas',this)">Todas as Reservas</div>
+    <div class="tab" onclick="irTab('materiais',this)">Materiais Enviados</div>
   </div>
 
   <div class="content">
@@ -247,6 +259,19 @@ tr:hover td{background:#fafbff;}
       </div>
     </div>
 
+
+    <!-- MATERIAIS -->
+    <div class="page" id="pg-materiais">
+      <div class="card-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0;">
+        <div class="card-title" style="font-size:16px;">Materiais para Divulgação</div>
+      </div>
+      <div class="card">
+        <table>
+          <thead><tr><th>Partner</th><th>Título</th><th>Tipo</th><th>Canal</th><th>Responsável</th><th>Data</th><th>Status</th><th>Ação</th></tr></thead>
+          <tbody id="tb-materiais"></tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -297,6 +322,7 @@ async function carregarTudo(){
   renderDashboard();
   renderPartners();
   renderTodasReservas();
+  renderMateriais();
 }
 
 function reservasPorPartner(pid){ return todasReservas.filter(function(r){return r.partner_id===pid;}); }
@@ -479,6 +505,62 @@ function verReservas(partnerId, nomeEmpresa){
   document.getElementById('modal-reservas').classList.add('open');
 }
 
+
+function renderMateriais(){
+  var tbody=document.getElementById('tb-materiais');
+  if(!tbody) return;
+  tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:20px;color:var(--claro);">Carregando...</td></tr>';
+  _sb.from('divulgacoes').select('*').order('created_at',{ascending:false}).then(function(res){
+    var rows=res.data||[];
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="vazio">Nenhum material enviado ainda.</td></tr>';return;}
+    tbody.innerHTML='';
+    rows.forEach(function(m){
+      var tr=document.createElement('tr');
+      var statusColor=m.status==='Aprovado'?'var(--verde)':m.status==='Recusado'?'var(--vermelho)':'var(--laranja)';
+      tr.innerHTML=
+        '<td><strong>'+(m.partner_nome||'—')+'</strong></td>'+
+        '<td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+m.titulo+'">'+m.titulo+'</td>'+
+        '<td style="font-size:11px;color:var(--claro);">'+m.tipo+'</td>'+
+        '<td style="font-size:11px;color:var(--claro);">'+m.canal+'</td>'+
+        '<td style="font-size:11px;">'+m.responsavel+'<br><span style="color:var(--claro);">'+m.email+'</span></td>'+
+        '<td style="font-size:11px;color:var(--claro);">'+new Date(m.created_at).toLocaleDateString('pt-BR')+'</td>'+
+        '<td><span style="font-size:10px;font-weight:700;color:'+statusColor+';">'+m.status+'</span></td>'+
+        '<td><div class="td-actions">'+
+          '<button class="btn-sm" onclick="verMaterial(''+m.id+'')">Ver</button>'+
+          (m.status==='Pendente'?
+            '<button class="btn-sm success" onclick="mudarStatus(''+m.id+'','Aprovado')">Aprovar</button>'+
+            '<button class="btn-sm danger" onclick="mudarStatus(''+m.id+'','Recusado')">Recusar</button>':'')+
+        '</div></td>';
+      tbody.appendChild(tr);
+    });
+  });
+}
+
+function verMaterial(id){
+  _sb.from('divulgacoes').select('*').eq('id',id).single().then(function(res){
+    if(!res.data) return;
+    var m=res.data;
+    document.getElementById('modal-partner-title').textContent='Material: '+m.titulo;
+    document.getElementById('modal-partner-sub').textContent='Enviado por '+m.partner_nome+' em '+new Date(m.created_at).toLocaleDateString('pt-BR');
+    document.getElementById('modal-conteudo-mat').innerHTML=
+      '<div style="display:grid;gap:12px;">'+
+      '<div><strong>Tipo:</strong> '+m.tipo+'</div>'+
+      '<div><strong>Canal:</strong> '+m.canal+'</div>'+
+      '<div><strong>Período:</strong> '+(m.periodo||'—')+'</div>'+
+      '<div><strong>Link:</strong> '+(m.link?'<a href="'+m.link+'" target="_blank">'+m.link+'</a>':'—')+'</div>'+
+      '<div><strong>Descrição:</strong><br><div style="background:var(--fundo);padding:12px;border-radius:8px;margin-top:6px;font-size:13px;line-height:1.6;">'+m.descricao+'</div></div>'+
+      '<div><strong>Responsável:</strong> '+m.responsavel+' · '+m.email+'</div>'+
+      '</div>';
+    document.getElementById('modal-material').classList.add('open');
+  });
+}
+
+async function mudarStatus(id, status){
+  await _sb.from('divulgacoes').update({status:status}).eq('id',id);
+  toast(status==='Aprovado'?'✅ Material aprovado!':'❌ Material recusado.');
+  renderMateriais();
+}
+
 function exportarCSV(){
   if(!reservasModal.length){toast('Nenhuma reserva para exportar.');return;}
   var linhas = [['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
@@ -512,6 +594,7 @@ function downloadCSV(linhas, nome){
 function fecharModal(id){document.getElementById(id).classList.remove('open');}
 
 function irTab(id, el){
+  if(id==='materiais') renderMateriais();
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   document.getElementById('pg-'+id).classList.add('active');
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
