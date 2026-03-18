@@ -185,6 +185,7 @@ tr:hover td{background:#fafbff;}
 <div class="toast" id="toast-el"></div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
 var _sb = window.supabase.createClient(
   'https://dsnckudhjxcsmyifseac.supabase.co',
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzbmNrdWRoanhjc215aWZzZWFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTExMjYsImV4cCI6MjA4ODYyNzEyNn0.jAmPEPB9scyKH67rfW3fA5Sw4hL4fRgf_WrOkimQjPs'
@@ -456,6 +457,7 @@ function toast(msg) {
 }
 
 carregarTudo();
+}); // end DOMContentLoaded
 </script>
 </body>
 </html>
