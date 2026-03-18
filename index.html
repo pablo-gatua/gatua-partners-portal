@@ -5,3 +5,224 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Gatua Partners — Portal</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+:root{--azul:#0c133d;--azul-medio:#1a2460;--dourado:#ffcf7d;--dourado-esc:#d49500;--fundo:#f4f5f9;--card:#ffffff;--borda:#e4e6ef;--texto:#1a1d2e;--medio:#5a5f7a;--claro:#9499b5;--verde:#1db87a;--vermelho:#f04444;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Montserrat',system-ui,sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;}
+#tela-login{display:flex;align-items:center;justify-content:center;min-height:100vh;background:linear-gradient(135deg,var(--azul) 0%,#1a2460 60%,#0a1030 100%);position:relative;overflow:hidden;}
+#tela-login::before{content:'';position:absolute;top:-100px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(255,207,125,.08) 0%,transparent 65%);}
+.login-box{background:#fff;border-radius:20px;padding:44px 40px;width:100%;max-width:420px;box-shadow:0 32px 80px rgba(0,0,0,.3);position:relative;z-index:1;}
+.login-logo{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.login-badge{background:var(--azul);color:var(--dourado);font-size:18px;font-weight:800;letter-spacing:.08em;padding:7px 13px;border-radius:8px;}
+.login-brand{font-size:15px;font-weight:700;color:var(--azul);}
+.login-sub{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--claro);margin-bottom:32px;}
+.login-title{font-size:22px;font-weight:800;color:var(--azul);margin-bottom:6px;}
+.login-desc{font-size:13px;color:var(--medio);margin-bottom:28px;line-height:1.6;}
+.login-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.login-label{font-size:10px;font-weight:700;color:var(--claro);letter-spacing:.14em;text-transform:uppercase;}
+.login-inp{background:var(--fundo);border:1.5px solid var(--borda);border-radius:9px;padding:12px 14px;font-size:13px;color:var(--texto);font-family:inherit;outline:none;transition:border-color .18s;width:100%;}
+.login-inp:focus{border-color:var(--azul);background:#fff;}
+.login-inp::placeholder{color:var(--claro);}
+.login-btn{width:100%;background:var(--dourado);color:var(--azul);border:none;padding:13px;border-radius:9px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;margin-top:6px;}
+.login-btn:hover{background:#ffd98e;transform:translateY(-1px);}
+.login-btn:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+.login-erro{background:#fff0f0;border:1px solid #fcc;border-radius:8px;padding:10px 14px;font-size:12px;color:var(--vermelho);font-weight:600;margin-top:12px;display:none;}
+.login-footer{text-align:center;margin-top:24px;font-size:11px;color:var(--claro);}
+#tela-loading{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--fundo);}
+.loading-inner{text-align:center;}
+.loading-badge{background:var(--azul);color:var(--dourado);font-size:20px;font-weight:800;letter-spacing:.08em;padding:10px 16px;border-radius:10px;display:inline-block;margin-bottom:16px;}
+.loading-txt{font-size:13px;color:var(--claro);font-weight:500;}
+#tela-app{display:none;}
+.sidebar{position:fixed;left:0;top:0;bottom:0;width:256px;background:#fff;border-right:1px solid var(--borda);display:flex;flex-direction:column;z-index:200;box-shadow:2px 0 16px rgba(12,19,61,.07);}
+.sb-logo{padding:26px 22px 18px;border-bottom:1px solid var(--borda);}
+.sb-logo-row{display:flex;align-items:center;gap:10px;margin-bottom:3px;}
+.sb-badge{background:var(--azul);color:var(--dourado);font-size:16px;font-weight:800;letter-spacing:.08em;padding:6px 11px;border-radius:7px;}
+.sb-name{font-size:13px;font-weight:700;color:var(--azul);}
+.sb-sub{font-size:10px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--claro);}
+.sb-pill{margin:14px 20px;background:linear-gradient(135deg,var(--azul),var(--azul-medio));border-radius:11px;padding:13px 15px;}
+.sb-pill-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sb-pill-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--dourado);font-weight:600;}
+.sb-pill-status::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--verde);flex-shrink:0;}
+nav{padding:6px 10px;flex:1;overflow-y:auto;}
+.nav-sec{font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--claro);padding:0 10px;margin:16px 0 5px;}
+.nav-btn{display:flex;align-items:center;gap:9px;padding:9px 10px;border-radius:9px;font-size:13px;font-weight:500;color:var(--medio);cursor:pointer;transition:all .16s;margin-bottom:1px;border:none;background:none;width:100%;text-align:left;font-family:inherit;}
+.nav-btn:hover{background:var(--fundo);color:var(--azul);}
+.nav-btn.active{background:rgba(12,19,61,.08);color:var(--azul);font-weight:700;}
+.nav-ico{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
+.sb-footer{padding:14px 22px;border-top:1px solid var(--borda);font-size:11px;color:var(--claro);display:flex;justify-content:space-between;align-items:center;}
+.btn-sair{background:none;border:none;font-size:11px;color:var(--claro);cursor:pointer;font-family:inherit;transition:color .16s;}
+.btn-sair:hover{color:var(--vermelho);}
+.main{margin-left:256px;min-height:100vh;}
+.topbar{padding:15px 36px;border-bottom:1px solid var(--borda);display:flex;align-items:center;justify-content:space-between;background:#fff;position:sticky;top:0;z-index:100;}
+.tb-crumb{font-size:11px;font-weight:500;color:var(--claro);margin-bottom:2px;}
+.tb-title{font-size:15px;font-weight:800;color:var(--azul);}
+.tb-actions{display:flex;gap:10px;align-items:center;}
+.btn-gold{background:var(--dourado);color:var(--azul);border:none;padding:9px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;}
+.btn-gold:hover{background:#ffd98e;transform:translateY(-1px);}
+.btn-ghost{background:transparent;color:var(--medio);border:1.5px solid var(--borda);padding:9px 18px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;transition:all .18s;}
+.btn-ghost:hover{border-color:var(--azul);color:var(--azul);}
+.btn-blue{background:var(--azul);color:#fff;border:none;padding:9px 18px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:background .18s;}
+.btn-blue:hover{background:var(--azul-medio);}
+.page{display:none;padding:32px 36px;animation:fadeIn .22s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.hero{background:linear-gradient(135deg,var(--azul) 0%,#1a2460 55%,#0a1030 100%);border-radius:16px;padding:40px 44px;margin-bottom:24px;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-80px;right:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,207,125,.1) 0%,transparent 65%);}
+.hero-eye{font-size:10px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--dourado);opacity:.85;margin-bottom:12px;}
+.hero h1{font-size:28px;font-weight:800;color:#fff;line-height:1.22;margin-bottom:12px;}
+.hero h1 em{font-style:normal;color:var(--dourado);}
+.hero-sub{font-size:13.5px;color:rgba(255,255,255,.58);line-height:1.75;max-width:500px;margin-bottom:32px;}
+.hero-stats{display:flex;gap:36px;}
+.st-num{font-size:26px;font-weight:800;color:var(--dourado);margin-bottom:3px;}
+.st-lbl{font-size:11px;color:rgba(255,255,255,.45);font-weight:500;}
+.contrato{background:#fff;border:1px solid var(--borda);border-left:4px solid var(--azul);border-radius:12px;padding:18px 24px;margin-bottom:24px;display:flex;align-items:center;gap:14px;}
+.ct-ico{font-size:26px;flex-shrink:0;}
+.ct-title{font-size:13px;font-weight:700;color:var(--azul);}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;margin-top:6px;}
+.sec-head h2{font-size:17px;font-weight:800;color:var(--azul);}
+.sec-link{font-size:12px;color:var(--azul-medio);font-weight:600;cursor:pointer;}
+.sec-link:hover{color:var(--dourado-esc);}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:24px;}
+.pilar{background:#fff;border:1px solid var(--borda);border-radius:14px;padding:22px 20px;position:relative;overflow:hidden;transition:all .2s;}
+.pilar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--azul),var(--azul-medio));}
+.pilar:hover{box-shadow:0 6px 24px rgba(12,19,61,.1);transform:translateY(-2px);}
+.pilar-num{font-size:9px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--claro);margin-bottom:10px;}
+.pilar-title{font-size:15px;font-weight:800;color:var(--azul);margin-bottom:8px;}
+.pilar-desc{font-size:12px;color:var(--medio);line-height:1.65;margin-bottom:14px;}
+.pilar-list{list-style:none;}
+.pilar-list li{font-size:11.5px;color:var(--texto);padding:5px 0;border-bottom:1px solid var(--borda);display:flex;gap:8px;align-items:flex-start;line-height:1.5;}
+.pilar-list li:last-child{border:none;padding-bottom:0;}
+.pilar-list li::before{content:'→';color:var(--dourado-esc);font-weight:700;font-size:11px;margin-top:1px;flex-shrink:0;}
+.bene{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:18px 14px;text-align:center;transition:all .2s;}
+.bene:hover{border-color:var(--azul);box-shadow:0 4px 16px rgba(12,19,61,.08);}
+.bene-ico{font-size:22px;margin-bottom:10px;}
+.bene-title{font-size:12px;font-weight:700;color:var(--azul);margin-bottom:4px;}
+.bene-desc{font-size:11px;color:var(--claro);line-height:1.5;}
+.ev-card{background:#fff;border:1px solid var(--borda);border-radius:14px;padding:22px;transition:all .2s;}
+.ev-card:hover{box-shadow:0 6px 24px rgba(12,19,61,.1);transform:translateY(-2px);border-color:#c8cbe0;}
+.ev-card.next{border-color:var(--azul);border-width:2px;}
+.ev-tag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;border-radius:20px;margin-bottom:12px;background:var(--fundo);color:var(--medio);}
+.ev-tag.prox{background:var(--azul);color:var(--dourado);}
+.ev-tag.confirmado{background:rgba(12,19,61,.07);color:var(--azul);}
+.ev-date{font-size:10px;font-weight:700;color:var(--claro);text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px;}
+.ev-name{font-size:13px;font-weight:800;color:var(--azul);line-height:1.4;margin-bottom:5px;}
+.ev-tema{font-size:11px;font-weight:500;color:var(--dourado-esc);margin-bottom:4px;}
+.ev-local{font-size:11px;color:var(--claro);margin-bottom:4px;}
+.ev-pub{font-size:10px;color:var(--claro);font-style:italic;margin-bottom:16px;line-height:1.4;}
+.ev-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.ev-spots{font-size:11px;font-weight:600;color:var(--verde);}
+.ev-spots.esgotado{color:var(--vermelho);}
+.btn-res{background:var(--azul);color:#fff;border:none;padding:7px 16px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .18s;white-space:nowrap;}
+.btn-res:hover{background:var(--azul-medio);}
+.btn-res.gold{background:var(--dourado);color:var(--azul);}
+.btn-res.gold:hover{background:#ffd98e;}
+.btn-res:disabled{opacity:.35;cursor:not-allowed;}
+.ing-saldo{background:#fff;border:1px solid var(--borda);border-radius:14px;padding:24px 28px;margin-bottom:24px;display:flex;gap:40px;align-items:center;}
+.ing-num{font-size:34px;font-weight:800;margin-bottom:3px;}
+.ing-lbl{font-size:12px;color:var(--medio);}
+.ing-div{width:1px;height:48px;background:var(--borda);}
+.ev-grupo{background:#fff;border:1px solid var(--borda);border-radius:14px;margin-bottom:14px;overflow:hidden;}
+.ev-grupo-head{padding:16px 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--borda);}
+.ev-grupo-nome{font-size:13px;font-weight:800;color:var(--azul);margin-bottom:3px;}
+.ev-grupo-info{font-size:11px;color:var(--claro);}
+.ev-grupo-badges{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.badge-vagas{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;background:rgba(29,184,122,.12);color:var(--verde);}
+.badge-vagas.cheio{background:rgba(240,68,68,.1);color:var(--vermelho);}
+.reserva-item{padding:14px 22px;border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:12px;}
+.reserva-item:last-child{border-bottom:none;}
+.reserva-num{width:24px;height:24px;border-radius:50%;background:var(--azul);color:#fff;font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.reserva-nome{font-size:13px;font-weight:700;color:var(--texto);margin-bottom:2px;}
+.reserva-detalhe{font-size:11px;color:var(--claro);}
+.reserva-tag{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:10px;background:rgba(29,184,122,.12);color:var(--verde);flex-shrink:0;margin-left:auto;}
+.slot-vazio{padding:14px 22px;border-bottom:1px solid var(--borda);display:flex;align-items:center;gap:12px;opacity:.4;}
+.slot-vazio:last-child{border-bottom:none;}
+.slot-num{width:24px;height:24px;border-radius:50%;border:2px dashed var(--borda);font-size:10px;font-weight:800;display:flex;align-items:center;justify-content:center;color:var(--claro);flex-shrink:0;}
+.slot-txt{font-size:12px;color:var(--claro);}
+.form-card{background:#fff;border:1px solid var(--borda);border-radius:16px;padding:30px 32px;margin-bottom:24px;}
+.form-intro{font-size:13px;color:var(--medio);margin-bottom:24px;line-height:1.75;max-width:560px;}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.field{display:flex;flex-direction:column;gap:6px;}
+.field.full{grid-column:1/-1;}
+.label{font-size:10px;font-weight:700;color:var(--claro);letter-spacing:.14em;text-transform:uppercase;}
+.inp,.sel,.txta{background:var(--fundo);border:1.5px solid var(--borda);border-radius:8px;padding:10px 13px;font-size:13px;color:var(--texto);font-family:inherit;transition:border-color .18s;outline:none;width:100%;}
+.inp::placeholder,.txta::placeholder{color:var(--claro);}
+.inp:focus,.sel:focus,.txta:focus{border-color:var(--azul);background:#fff;}
+.sel{appearance:none;cursor:pointer;}
+.txta{resize:vertical;min-height:90px;}
+.form-foot{display:flex;justify-content:flex-end;margin-top:22px;gap:10px;}
+.modal-overlay{position:fixed;inset:0;background:rgba(12,19,61,.45);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:18px;padding:36px;width:100%;max-width:500px;position:relative;box-shadow:0 24px 64px rgba(12,19,61,.25);animation:modalIn .25s ease;max-height:90vh;overflow-y:auto;}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.modal-close{position:absolute;top:18px;right:18px;background:var(--fundo);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--medio);}
+.modal-close:hover{background:var(--borda);}
+.modal-eye{font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--dourado-esc);margin-bottom:6px;}
+.modal-title{font-size:18px;font-weight:800;color:var(--azul);margin-bottom:4px;line-height:1.3;}
+.modal-evento{font-size:12px;color:var(--medio);margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid var(--borda);}
+.modal-vagas{display:inline-flex;align-items:center;gap:6px;background:rgba(29,184,122,.1);color:var(--verde);font-size:11px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:20px;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;}
+.modal-field{display:flex;flex-direction:column;gap:5px;}
+.modal-field.full{grid-column:1/-1;}
+.modal-label{font-size:10px;font-weight:700;color:var(--claro);letter-spacing:.14em;text-transform:uppercase;}
+.modal-inp{background:var(--fundo);border:1.5px solid var(--borda);border-radius:8px;padding:10px 13px;font-size:13px;color:var(--texto);font-family:inherit;outline:none;width:100%;transition:border-color .18s;}
+.modal-inp:focus{border-color:var(--azul);background:#fff;}
+.modal-inp::placeholder{color:var(--claro);}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;}
+.modal-success{text-align:center;padding:16px 0;}
+.modal-success-ico{font-size:48px;margin-bottom:12px;}
+.modal-success-title{font-size:17px;font-weight:800;color:var(--azul);margin-bottom:8px;}
+.modal-success-desc{font-size:13px;color:var(--medio);line-height:1.6;}
+.spinner{display:inline-block;width:15px;height:15px;border:2px solid rgba(12,19,61,.15);border-top-color:var(--azul);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:6px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.toast{position:fixed;bottom:28px;right:28px;background:var(--azul);color:#fff;padding:12px 22px;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;box-shadow:0 8px 32px rgba(12,19,61,.25);opacity:0;transform:translateY(10px);transition:all .3s ease;z-index:600;pointer-events:none;max-width:320px;}
+.toast.show{opacity:1;transform:translateY(0);}
+.next-mini{background:#fff;border:2px solid var(--azul);border-radius:14px;padding:22px;max-width:460px;}
+</style>
+</head>
+<body>
+<div id="tela-loading"><div class="loading-inner"><div class="loading-badge">GATUA</div><div class="loading-txt">Carregando portal...</div></div></div>
+<div id="tela-login" style="display:none;"><div class="login-box"><div class="login-logo"><div class="login-badge">GATUA</div><div class="login-brand">Partners</div></div><div class="login-sub">Portal Exclusivo</div><div class="login-title">Bem-vindo de volta</div><div class="login-desc">Acesse o portal com o e-mail e senha fornecidos pela equipe Gatua.</div><div class="login-field"><label class="login-label">E-mail</label><input class="login-inp" id="login-email" type="email" placeholder="email@suaempresa.com"/></div><div class="login-field"><label class="login-label">Senha</label><input class="login-inp" id="login-senha" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')fazerLogin()"/></div><button class="login-btn" id="login-btn" onclick="fazerLogin()">Entrar no portal</button><div class="login-erro" id="login-erro"></div><div class="login-footer">Problemas de acesso? Fale com a equipe Gatua<br>partners@gatua.com.br</div></div></div>
+<div id="tela-app"><div class="modal-overlay" id="modal-reserva"><div class="modal"><button class="modal-close" onclick="fecharModal()">✕</button><div id="modal-conteudo"></div></div></div>
+<aside class="sidebar"><div class="sb-logo"><div class="sb-logo-row"><div class="sb-badge">GATUA</div><div class="sb-name">Partners</div></div><div class="sb-sub">Portal Exclusivo</div></div><div class="sb-pill"><div class="sb-pill-name" id="sb-empresa">—</div><div class="sb-pill-status">Parceiro Ativo</div></div><nav><div class="nav-sec">Menu</div><button class="nav-btn active" onclick="ir('inicio',this)"><span class="nav-ico">🏠</span>Início</button><button class="nav-btn" onclick="ir('eventos',this)"><span class="nav-ico">📅</span>Eventos 2026</button><button class="nav-btn" onclick="ir('ingressos',this)"><span class="nav-ico">🎟️</span>Meus Ingressos</button><button class="nav-btn" onclick="ir('divulgacao',this)"><span class="nav-ico">📢</span>Enviar Divulgação</button></nav><div class="sb-footer"><span>partners@gatua.com.br</span><button class="btn-sair" onclick="sair()">Sair →</button></div></aside>
+<main class="main"><div class="topbar"><div><div class="tb-crumb">Portal Partners</div><div class="tb-title" id="tb-titulo">Início</div></div><div class="tb-actions"><button class="btn-gold" onclick="ir('divulgacao',document.querySelectorAll('.nav-btn')[3])">+ Enviar Material</button></div></div>
+<div class="page active" id="pg-inicio"><div style="max-width:1060px;"><div class="hero"><div class="hero-eye">Gatua Partners · Painel Exclusivo 2026</div><h1>Infraestrutura de <em>Posicionamento</em><br>no Agronegócio Corporativo.</h1><p class="hero-sub">Estar na Gatua não é patrocínio — é posicionamento. Você ocupa espaço onde as decisões do agronegócio corporativo acontecem, constrói relações com quem compra, influencia e decide, e acessa inteligência de mercado que não chega por outro canal.</p><div class="hero-stats"><div><div class="st-num">4</div><div class="st-lbl">Gatua Meetings 2026</div></div><div><div class="st-num" id="h-ing-total">12</div><div class="st-lbl">Ingressos incluídos</div></div><div><div class="st-num">2k+</div><div class="st-lbl">Executivos na base</div></div><div><div class="st-num">22</div><div class="st-lbl">Anos de ecossistema</div></div></div></div>
+<div class="contrato"><div class="ct-ico">📄</div><div class="ct-title" id="ct-titulo">Contrato Ativo — Vigência: —</div></div>
+<div class="sec-head"><h2>Seus 3 Pilares de Valor</h2></div>
+<div class="g3"><div class="pilar"><div class="pilar-num">Pilar 01</div><div class="pilar-title">👁️ Visibilidade</div><div class="pilar-desc">Presença contínua de 365 dias.</div><ul class="pilar-list"><li>Newsletter Agro Review (12x/ano · 2.000+ executivos)</li><li>Artigo no Blog + LinkedIn Gatua (2x/ano)</li><li>Apoiador Oficial nos Gatua Meetings</li><li>Logo em redes sociais, e-mails e e-book pós-evento</li></ul></div><div class="pilar"><div class="pilar-num">Pilar 02</div><div class="pilar-title">🤝 Networking</div><div class="pilar-desc">Conexões com decisores reais.</div><ul class="pilar-list"><li>3 vagas por Gatua Meeting (12 ingressos no ano)</li><li>Lista de participantes: nome, cargo, e-mail, telefone</li><li>Acesso à Comunidade Partners no WhatsApp</li><li>Prioridade em indicações no ecossistema</li></ul></div><div class="pilar"><div class="pilar-num">Pilar 03</div><div class="pilar-title">📡 Inteligência</div><div class="pilar-desc">Insights reais dos executivos.</div><ul class="pilar-list"><li>Resumo pós-evento com inteligência (4x/ano)</li><li>Radar Mensal de Mercado (12x/ano)</li><li>Reuniões Consultivas Trimestrais (4x · 1h)</li><li>Revisão Estratégica Anual (1x · 1h)</li></ul></div></div>
+<div class="g4"><div class="bene"><div class="bene-ico">🎟️</div><div class="bene-title">12 Ingressos/Ano</div><div class="bene-desc">3 por evento em todos os 4 Meetings</div></div><div class="bene"><div class="bene-ico">📰</div><div class="bene-title">12 Newsletters</div><div class="bene-desc">Seção "Partners em Foco" · 2.000+ exec.</div></div><div class="bene"><div class="bene-ico">🗓️</div><div class="bene-title">4 Consultorias</div><div class="bene-desc">Reuniões trimestrais de 1h com a Gatua</div></div><div class="bene"><div class="bene-ico">📋</div><div class="bene-title">Inteligência Real</div><div class="bene-desc">Radar mensal + resumos pós-evento</div></div></div>
+<div class="sec-head"><h2>Próximo Evento</h2><span class="sec-link" onclick="ir('eventos',document.querySelectorAll('.nav-btn')[1])">Ver todos →</span></div>
+<div class="next-mini"><div class="ev-tag prox">⭐ Próximo — 21/05/2026</div><div class="ev-name">Gatua Meeting - TI do Futuro: A Nova Gestão de TI</div><div class="ev-tema">Transformação Digital & IA</div><div class="ev-local">📍 Dabi Business Park — Ribeirão Preto SP</div><div class="ev-pub">CTOs, VPs Tecnologia, Diretores TI, Gerentes de TI</div><div class="ev-foot"><div class="ev-spots" id="spots-home">— vagas disponíveis</div><button class="btn-res gold" onclick="abrirModal(0)">Reservar agora</button></div></div></div></div>
+<div class="page" id="pg-eventos"><div style="max-width:1060px;"><div class="sec-head" style="margin-bottom:24px;"><h2>Gatua Meetings 2026</h2></div><div class="g3" id="grid-eventos"></div></div></div>
+<div class="page" id="pg-ingressos"><div style="max-width:720px;"><div class="sec-head" style="margin-bottom:20px;"><h2>Meus Ingressos</h2></div><div class="ing-saldo"><div><div class="ing-num" style="color:var(--azul);" id="ing-total">—</div><div class="ing-lbl">Total incluídos</div></div><div class="ing-div"></div><div><div class="ing-num" style="color:var(--verde);" id="ing-disp">—</div><div class="ing-lbl">Disponíveis</div></div><div class="ing-div"></div><div><div class="ing-num" style="color:var(--claro);" id="ing-usados">—</div><div class="ing-lbl">Utilizados</div></div></div><div id="lista-ingressos"></div></div></div>
+<div class="page" id="pg-divulgacao"><div style="max-width:720px;"><div class="sec-head" style="margin-bottom:20px;"><h2>Enviar Material para Divulgação</h2></div><div class="form-card"><div class="form-intro">Compartilhe novidades, lançamentos ou conteúdos da sua empresa. A equipe Gatua avalia e divulga para nossa base de executivos do agronegócio.</div><form id="form-divulgacao"><div class="fg"><div class="field"><label class="label">Título do Material *</label><input class="inp" name="titulo" type="text" placeholder="Ex: Lançamento da solução XYZ" required/></div><div class="field"><label class="label">Tipo de Conteúdo *</label><select class="sel" name="tipo" required><option value="">Selecione</option><option>Lançamento de produto / solução</option><option>Artigo / Conteúdo educativo</option><option>Case de sucesso no agro</option><option>Novidade institucional</option><option>Convite para evento próprio</option></select></div><div class="field full"><label class="label">Descrição *</label><textarea class="txta" name="descricao" required placeholder="Descreva o conteúdo..."></textarea></div><div class="field"><label class="label">Canal</label><select class="sel" name="canal"><option>LinkedIn + Instagram + Newsletter</option><option>Apenas LinkedIn</option><option>Apenas Newsletter</option><option>WhatsApp Comunidade</option><option>Blog + LinkedIn</option></select></div><div class="field"><label class="label">Período Sugerido</label><input class="inp" name="periodo" type="date"/></div><div class="field full"><label class="label">Link de Referência</label><input class="inp" name="link" type="url" placeholder="https://suaempresa.com.br"/></div><div class="field"><label class="label">Responsável *</label><input class="inp" name="responsavel" type="text" required placeholder="Nome completo"/></div><div class="field"><label class="label">E-mail *</label><input class="inp" name="email" type="email" required placeholder="email@empresa.com"/></div></div><div class="form-foot"><button type="button" class="btn-ghost" onclick="toast('Rascunho salvo.')">Salvar rascunho</button><button type="button" class="btn-gold" id="btn-divulgar" onclick="enviarDivulgacao()">Enviar para análise →</button></div></form></div></div></div>
+</main></div>
+<div class="toast" id="toast-el"></div>
+<script>
+var _sb=window.supabase.createClient('https://dsnckudhjxcsmyifseac.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzbmNrdWRoanhjc215aWZzZWFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTExMjYsImV4cCI6MjA4ODYyNzEyNn0.jAmPEPB9scyKH67rfW3fA5Sw4hL4fRgf_WrOkimQjPs');
+var EVENTOS=[{id:0,nome:'Gatua Meeting - TI do Futuro: A Nova Gestão de TI',data:'Quinta-feira, 21 de Maio de 2026 · 08:00h',info:'📅 21/05/2026 · 08:00h · Dabi Business Park — Ribeirão Preto SP',tema:'Transformação Digital & IA',local:'📍 Dabi Business Park — Ribeirão Preto SP',pub:'CTOs, VPs Tecnologia, Diretores TI, Gerentes de TI',proximo:true},{id:1,nome:'Gatua Meeting - Campo Inteligente: Tecnologia na Gestão Agrícola',data:'Quinta-feira, 20 de Agosto de 2026 · 08:00h',info:'📅 20/08/2026 · 08:00h · Dabi Business Park — Ribeirão Preto SP',tema:'IA em Operações Agrícolas',local:'📍 Dabi Business Park — Ribeirão Preto SP',pub:'COOs, Diretores Agrícolas, Gestores, Agrônomos',proximo:false},{id:2,nome:'Gatua Meeting - Gestão e Tecnologia no Agro: Da Gestão à IA',data:'Quinta-feira, 17 de Setembro de 2026 · 08:00h',info:'📅 17/09/2026 · 08:00h · PwC — Uberaba MG',tema:'Integração: Gestão + IA + Estratégia',local:'📍 PwC — Uberaba MG',pub:'Todas as áreas + Produtores',proximo:false},{id:3,nome:'Gatua Meeting - Indústria Inteligente: Tecnologia na Agroindústria',data:'Quinta-feira, 12 de Novembro de 2026 · 08:00h',info:'📅 12/11/2026 · 08:00h · Dabi Business Park — Ribeirão Preto SP',tema:'Automação & Produção Industrial',local:'📍 Dabi Business Park — Ribeirão Preto SP',pub:'Diretores Industriais, Gerentes de Produção, Supervisores',proximo:false}];
+var partnerData={},reservasData=[],eventoModalIdx=0;
+function mostrarLogin(){document.getElementById('tela-loading').style.display='none';document.getElementById('tela-login').style.display='flex';}
+function mostrarApp(){document.getElementById('tela-loading').style.display='none';document.getElementById('tela-login').style.display='none';document.getElementById('tela-app').style.display='block';}
+async function init(){try{var r=await _sb.auth.getSession();var s=r.data&&r.data.session?r.data.session:null;if(s){await carregarTudo(s.user.id);mostrarApp();}else{mostrarLogin();}}catch(e){console.error(e);mostrarLogin();}}
+async function carregarTudo(uid){try{var p=await _sb.from('partners').select('*').eq('id',uid).single();var rv=await _sb.from('reservas').select('*').eq('partner_id',uid).order('created_at',{ascending:true});if(p.data){partnerData=p.data;aplicarDados(p.data);}reservasData=rv.data||[];renderizarEventos();renderizarIngressos();}catch(e){console.error(e);}}
+function aplicarDados(p){document.getElementById('sb-empresa').textContent=p.nome_empresa||'—';document.getElementById('ct-titulo').textContent='Contrato Ativo — Vigência: '+(p.vigencia||'—');document.getElementById('h-ing-total').textContent=p.ingressos_total||'12';document.getElementById('ing-total').textContent=p.ingressos_total||'12';document.getElementById('ing-disp').textContent=p.ingressos_disponiveis||'—';document.getElementById('ing-usados').textContent=p.ingressos_utilizados||'—';}
+function reservasPorEvento(n){return reservasData.filter(function(r){return r.evento_nome===n;});}
+function renderizarEventos(){var g=document.getElementById('grid-eventos');g.innerHTML='';EVENTOS.forEach(function(ev){var res=reservasPorEvento(ev.nome);var d=3-res.length;var e=d<=0;if(ev.proximo){var el=document.getElementById('spots-home');el.textContent=e?'Vagas esgotadas':d+' vaga'+(d>1?'s':'')+' disponível';el.className='ev-spots'+(e?' esgotado':'');}var c=document.createElement('div');c.className='ev-card'+(ev.proximo?' next':'');c.innerHTML=(ev.proximo?'<div class="ev-tag prox">⭐ Próximo</div>':'<div class="ev-tag confirmado">Confirmado</div>')+'<div class="ev-date">'+ev.data+'</div><div class="ev-name">'+ev.nome+'</div><div class="ev-tema">'+ev.tema+'</div><div class="ev-local">'+ev.local+'</div><div class="ev-pub">'+ev.pub+'</div><div class="ev-foot">'+(e?'<div class="ev-spots esgotado">Vagas esgotadas</div>':'<div class="ev-spots">'+d+' vaga'+(d>1?'s':'')+' disponível</div>')+(e?'<button class="btn-res" disabled>Esgotado</button>':'<button class="btn-res'+(ev.proximo?' gold':'')+'" onclick="abrirModal('+ev.id+')">Reservar</button>')+'</div>';g.appendChild(c);});}
+function renderizarIngressos(){var l=document.getElementById('lista-ingressos');l.innerHTML='';EVENTOS.forEach(function(ev){var res=reservasPorEvento(ev.nome);var e=res.length>=3;var g=document.createElement('div');g.className='ev-grupo';var h='<div class="ev-grupo-head"><div><div class="ev-grupo-nome">'+ev.nome+'</div><div class="ev-grupo-info">'+ev.info+'</div></div><div class="ev-grupo-badges"><span class="badge-vagas'+(e?' cheio':'')+'">'+res.length+'/3 reservados</span>'+(!e?'<button class="btn-res" style="padding:6px 12px;font-size:10px;" onclick="abrirModal('+ev.id+')">+ Reservar</button>':'')+'</div></div>';var it='';for(var i=0;i<3;i++){if(res[i]){it+='<div class="reserva-item"><div class="reserva-num">'+(i+1)+'</div><div style="flex:1;"><div class="reserva-nome">'+res[i].nome_participante+'</div><div class="reserva-detalhe">'+res[i].cargo+' · '+res[i].empresa+' · '+res[i].email+'</div></div><div class="reserva-tag">Reservado</div></div>';}else{it+='<div class="slot-vazio"><div class="slot-num">'+(i+1)+'</div><div class="slot-txt">Vaga disponível</div></div>';}}g.innerHTML=h+it;l.appendChild(g);});}
+async function fazerLogin(){var em=document.getElementById('login-email').value.trim();var se=document.getElementById('login-senha').value;var bt=document.getElementById('login-btn');var er=document.getElementById('login-erro');if(!em||!se){er.textContent='Preencha e-mail e senha.';er.style.display='block';return;}bt.innerHTML='Entrando...';bt.disabled=true;er.style.display='none';try{var r=await _sb.auth.signInWithPassword({email:em,password:se});if(r.error){er.textContent='E-mail ou senha incorretos.';er.style.display='block';bt.innerHTML='Entrar no portal';bt.disabled=false;return;}await carregarTudo(r.data.user.id);mostrarApp();}catch(e){er.textContent='Erro de conexão.';er.style.display='block';bt.innerHTML='Entrar no portal';bt.disabled=false;}}
+async function sair(){await _sb.auth.signOut();partnerData={};reservasData=[];document.getElementById('tela-app').style.display='none';document.getElementById('login-email').value='';document.getElementById('login-senha').value='';mostrarLogin();}
+var titulos={inicio:'Início',eventos:'Eventos 2026',ingressos:'Meus Ingressos',divulgacao:'Enviar Divulgação'};
+function ir(id,btn){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});document.getElementById('pg-'+id).classList.add('active');document.getElementById('tb-titulo').textContent=titulos[id];if(btn){document.querySelectorAll('.nav-btn').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');}window.scrollTo(0,0);}
+function toast(msg){var t=document.getElementById('toast-el');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},4000);}
+function abrirModal(idx){eventoModalIdx=idx;var ev=EVENTOS[idx];var res=reservasPorEvento(ev.nome);var d=3-res.length;if(d<=0){toast('Todas as vagas deste evento já foram reservadas.');return;}document.getElementById('modal-conteudo').innerHTML='<div class="modal-eye">Reserva de Ingresso</div><div class="modal-title">'+ev.nome+'</div><div class="modal-evento">'+ev.info+'</div><div class="modal-vagas">🎟️ '+d+' vaga'+(d>1?'s':'')+' disponível</div><div class="modal-grid"><div class="modal-field full"><label class="modal-label">Nome completo *</label><input class="modal-inp" id="res-nome" type="text" placeholder="Nome do participante"/></div><div class="modal-field"><label class="modal-label">Empresa *</label><input class="modal-inp" id="res-empresa" type="text" value="'+(partnerData.nome_empresa||'')+'" placeholder="Empresa"/></div><div class="modal-field"><label class="modal-label">Cargo *</label><input class="modal-inp" id="res-cargo" type="text" placeholder="Cargo"/></div><div class="modal-field"><label class="modal-label">CPF *</label><input class="modal-inp" id="res-cpf" type="text" placeholder="000.000.000-00" maxlength="14" oninput="mCPF(this)"/></div><div class="modal-field"><label class="modal-label">E-mail *</label><input class="modal-inp" id="res-email" type="email" placeholder="email@empresa.com"/></div><div class="modal-field"><label class="modal-label">Telefone *</label><input class="modal-inp" id="res-tel" type="tel" placeholder="(00) 00000-0000" maxlength="15" oninput="mTel(this)"/></div></div><div class="modal-foot"><button class="btn-ghost" onclick="fecharModal()">Cancelar</button><button class="btn-gold" id="btn-reservar" onclick="enviarReserva()">Confirmar Reserva</button></div>';document.getElementById('modal-reserva').classList.add('open');}
+function fecharModal(){document.getElementById('modal-reserva').classList.remove('open');}
+function mCPF(i){var v=i.value.replace(/D/g,'');v=v.replace(/(d{3})(d)/,'$1.$2');v=v.replace(/(d{3})(d)/,'$1.$2');v=v.replace(/(d{3})(d{1,2})$/,'$1-$2');i.value=v;}
+function mTel(i){var v=i.value.replace(/D/g,'');v=v.replace(/^(d{2})(d)/,'($1) $2');v=v.replace(/(d{5})(d)/,'$1-$2');i.value=v;}
+async function enviarReserva(){var nome=document.getElementById('res-nome').value.trim();var emp=document.getElementById('res-empresa').value.trim();var cargo=document.getElementById('res-cargo').value.trim();var cpf=document.getElementById('res-cpf').value.trim();var email=document.getElementById('res-email').value.trim();var tel=document.getElementById('res-tel').value.trim();var ev=EVENTOS[eventoModalIdx];if(!nome||!emp||!cargo||!cpf||!email||!tel){toast('Preencha todos os campos.');return;}var btn=document.getElementById('btn-reservar');btn.innerHTML='Enviando...';btn.disabled=true;try{var s=await _sb.auth.getSession();var uid=s.data.session.user.id;var ins=await _sb.from('reservas').insert({partner_id:uid,evento_nome:ev.nome,evento_info:ev.info,nome_participante:nome,empresa:emp,cargo:cargo,cpf:cpf,email:email,telefone:tel});if(ins.error){toast('Erro ao salvar. Tente novamente.');btn.innerHTML='Confirmar Reserva';btn.disabled=false;return;}var nd=(partnerData.ingressos_disponiveis||0)-1;var nu=(partnerData.ingressos_utilizados||0)+1;await _sb.from('partners').update({ingressos_disponiveis:nd,ingressos_utilizados:nu}).eq('id',uid);partnerData.ingressos_disponiveis=nd;partnerData.ingressos_utilizados=nu;document.getElementById('ing-disp').textContent=nd;document.getElementById('ing-usados').textContent=nu;var fd=new FormData();fd.append('evento',ev.nome);fd.append('nome',nome);fd.append('empresa',emp);fd.append('cargo',cargo);fd.append('cpf',cpf);fd.append('email',email);fd.append('telefone',tel);fd.append('partner',partnerData.nome_empresa||'');fetch('https://formspree.io/f/xgonekoq',{method:'POST',body:fd,headers:{'Accept':'application/json'}});reservasData.push({evento_nome:ev.nome,evento_info:ev.info,nome_participante:nome,empresa:emp,cargo:cargo,cpf:cpf,email:email,telefone:tel});renderizarEventos();renderizarIngressos();document.getElementById('modal-conteudo').innerHTML='<div class="modal-success"><div class="modal-success-ico">🎟️</div><div class="modal-success-title">Reserva confirmada!</div><div class="modal-success-desc">Reserva para <strong>'+ev.nome+'</strong> registrada.<br>Participante: <strong>'+nome+'</strong></div><br><button class="btn-blue" onclick="fecharModal()" style="width:100%;margin-top:8px;">Fechar</button></div>';}catch(e){toast('Erro de conexão.');btn.innerHTML='Confirmar Reserva';btn.disabled=false;}}
+async function enviarDivulgacao(){var form=document.getElementById('form-divulgacao');var titulo=form.querySelector('[name="titulo"]').value.trim();var tipo=form.querySelector('[name="tipo"]').value;var desc=form.querySelector('[name="descricao"]').value.trim();var resp=form.querySelector('[name="responsavel"]').value.trim();var email=form.querySelector('[name="email"]').value.trim();if(!titulo||!tipo||!desc||!resp||!email){toast('Preencha todos os campos obrigatórios.');return;}var btn=document.getElementById('btn-divulgar');btn.innerHTML='Enviando...';btn.disabled=true;var fd=new FormData(form);fd.append('partner',partnerData.nome_empresa||'');try{var res=await fetch('https://formspree.io/f/xkoqnrol',{method:'POST',body:fd,headers:{'Accept':'application/json'}});if(res.ok){btn.innerHTML='✅ Enviado!';btn.style.background='var(--verde)';btn.style.color='#fff';form.reset();toast('Material enviado! Análise em até 2 dias úteis.');setTimeout(function(){btn.innerHTML='Enviar para análise →';btn.style.background='';btn.style.color='';btn.disabled=false;},4000);}else{toast('Erro ao enviar.');btn.innerHTML='Enviar para análise →';btn.disabled=false;}}catch(e){toast('Erro de conexão.');btn.innerHTML='Enviar para análise →';btn.disabled=false;}}
+init();
+</script>
+</body>
+</html>
