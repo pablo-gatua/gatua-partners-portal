@@ -260,11 +260,10 @@ var _sb = window.supabase.createClient(
 
 var SENHA_ADMIN = 'Gatua2026';
 var EVENTOS_NOMES = [
-  {nome:'TI do Futuro: A Nova Gestão de TI', data:'25/03/2026'},
-  {nome:'Campo Inteligente: Tecnologia na Gestão Agrícola', data:'21/05/2026'},
-  {nome:'Indústria Inteligente: Tecnologia na Agroindústria', data:'20/08/2026'},
-  {nome:'Gestão e Tecnologia no Agro: Da Gestão à IA', data:'17/09/2026'},
-  {nome:'Gestão Inteligente: Planejamento de Safra', data:'12/11/2026'}
+  {nome:'Gatua Meeting - TI do Futuro: A Nova Gestão de TI', data:'21/05/2026'},
+  {nome:'Gatua Meeting - Campo Inteligente: Tecnologia na Gestão Agrícola', data:'20/08/2026'},
+  {nome:'Gatua Meeting - Gestão e Tecnologia no Agro: Da Gestão à IA', data:'17/09/2026'},
+  {nome:'Gatua Meeting - Indústria Inteligente: Tecnologia na Agroindústria', data:'12/11/2026'}
 ];
 
 var todosPartners = [];
@@ -305,7 +304,7 @@ function reservasPorPartner(pid){ return todasReservas.filter(function(r){return
 function renderDashboard(){
   var ativos = todosPartners.filter(function(p){return p.ativo !== false;}).length;
   var totalUsados = todasReservas.length;
-  var totalDisp = (ativos * 15) - totalUsados;
+  var totalDisp = (ativos * 12) - totalUsados;
   document.getElementById('st-partners').textContent = ativos;
   document.getElementById('st-reservas').textContent = todasReservas.length;
   document.getElementById('st-ingressos').textContent = totalUsados;
