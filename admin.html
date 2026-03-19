@@ -3,461 +3,1033 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Gatua Admin</title><!-- v2 -->
+<title>Gatua · Admin</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
-:root{--azul:#0c133d;--azul-medio:#1a2460;--dourado:#ffcf7d;--dourado-esc:#d49500;--fundo:#f4f5f9;--borda:#e4e6ef;--texto:#1a1d2e;--medio:#5a5f7a;--claro:#9499b5;--verde:#1db87a;--vermelho:#f04444;--laranja:#f59e0b;}
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Montserrat',system-ui,sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;}
-.topbar{background:var(--azul);padding:0 32px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.tb-left{display:flex;align-items:center;gap:12px;}
-.tb-badge{background:var(--dourado);color:var(--azul);font-size:14px;font-weight:800;letter-spacing:.08em;padding:5px 10px;border-radius:6px;}
-.tb-name{font-size:13px;font-weight:700;color:#fff;}
-.tb-admin{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.4);}
-.tabs{background:#fff;border-bottom:1px solid var(--borda);padding:0 32px;display:flex;gap:0;}
-.tab{padding:14px 20px;font-size:12px;font-weight:600;color:var(--claro);cursor:pointer;border-bottom:2px solid transparent;transition:all .18s;}
-.tab:hover{color:var(--azul);}
-.tab.active{color:var(--azul);border-bottom-color:var(--azul);font-weight:700;}
-.content{padding:28px 32px;max-width:1200px;}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
-.stat{background:#fff;border:1px solid var(--borda);border-radius:12px;padding:18px 20px;}
-.stat-num{font-size:28px;font-weight:800;margin-bottom:4px;}
-.stat-lbl{font-size:11px;color:var(--claro);}
-.card{background:#fff;border:1px solid var(--borda);border-radius:14px;overflow:hidden;margin-bottom:20px;}
-.card-head{padding:16px 22px;border-bottom:1px solid var(--borda);display:flex;align-items:center;justify-content:space-between;}
-.card-title{font-size:14px;font-weight:800;color:var(--azul);}
-table{width:100%;border-collapse:collapse;}
-th{padding:10px 18px;text-align:left;font-size:10px;font-weight:700;color:var(--claro);letter-spacing:.12em;text-transform:uppercase;background:var(--fundo);border-bottom:1px solid var(--borda);}
-td{padding:13px 18px;font-size:12px;color:var(--texto);border-bottom:1px solid var(--borda);}
-tr:last-child td{border-bottom:none;}
-tr:hover td{background:#fafbff;}
-.badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:20px;}
-.badge.ativo{background:rgba(29,184,122,.12);color:var(--verde);}
-.badge.inativo{background:rgba(240,68,68,.1);color:var(--vermelho);}
-.td-actions{display:flex;gap:6px;flex-wrap:wrap;}
-.btn-sm{background:none;border:1.5px solid var(--borda);padding:5px 11px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--medio);transition:all .16s;}
-.btn-sm:hover{border-color:var(--azul);color:var(--azul);}
-.btn-sm.danger{border-color:rgba(240,68,68,.3);color:var(--vermelho);}
-.btn-sm.danger:hover{background:rgba(240,68,68,.08);}
-.btn-sm.success{border-color:rgba(29,184,122,.3);color:var(--verde);}
-.btn-sm.success:hover{background:rgba(29,184,122,.08);}
-.btn-primary{background:var(--azul);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-.btn-primary:hover{background:var(--azul-medio);}
-.btn-gold{background:var(--dourado);color:var(--azul);border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-.btn-gold:hover{background:#ffd98e;}
-.btn-ghost{background:transparent;color:var(--medio);border:1.5px solid var(--borda);padding:9px 18px;border-radius:8px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;}
-.btn-ghost:hover{border-color:var(--azul);color:var(--azul);}
-.btn-green{background:var(--verde);color:#fff;border:none;padding:10px 20px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
-.modal-overlay{position:fixed;inset:0;background:rgba(12,19,61,.45);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
-.modal-overlay.open{display:flex;}
-.modal{background:#fff;border-radius:18px;padding:36px;width:100%;max-width:560px;position:relative;box-shadow:0 24px 64px rgba(12,19,61,.25);max-height:90vh;overflow-y:auto;}
-.modal-close{position:absolute;top:18px;right:18px;background:var(--fundo);border:none;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;color:var(--medio);}
-.modal-close:hover{background:var(--borda);}
-.modal-title{font-size:18px;font-weight:800;color:var(--azul);margin-bottom:4px;}
-.modal-sub{font-size:12px;color:var(--claro);margin-bottom:24px;}
-.fg{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
-.field{display:flex;flex-direction:column;gap:5px;}
-.field.full{grid-column:1/-1;}
-.label{font-size:10px;font-weight:700;color:var(--claro);letter-spacing:.14em;text-transform:uppercase;}
-.inp,.sel{background:var(--fundo);border:1.5px solid var(--borda);border-radius:8px;padding:10px 13px;font-size:13px;color:var(--texto);font-family:inherit;outline:none;width:100%;transition:border-color .18s;}
-.inp:focus,.sel:focus{border-color:var(--azul);background:#fff;}
-.inp::placeholder{color:var(--claro);}
-.sel{appearance:none;cursor:pointer;}
-.modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;}
-.section-head{padding:12px 18px;background:rgba(12,19,61,.03);border-bottom:1px solid var(--borda);font-size:11px;font-weight:700;color:var(--azul);text-transform:uppercase;display:flex;justify-content:space-between;align-items:center;}
-.vazio{text-align:center;padding:40px;color:var(--claro);font-size:13px;}
-.mat-desc{background:var(--fundo);padding:14px;border-radius:8px;font-size:13px;line-height:1.7;margin-top:8px;max-height:200px;overflow-y:auto;}
-.toast{position:fixed;bottom:24px;right:24px;background:var(--azul);color:#fff;padding:12px 22px;border-radius:10px;font-size:13px;font-weight:600;font-family:inherit;box-shadow:0 8px 32px rgba(12,19,61,.25);opacity:0;transform:translateY(10px);transition:all .3s;z-index:600;pointer-events:none;}
-.toast.show{opacity:1;transform:translateY(0);}
-.page{display:none;}
-.page.active{display:block;}
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&display=swap');
+:root {
+  --azul: #0c133d;
+  --azul-m: #1a2460;
+  --azul-lt: #e8eaf4;
+  --ouro: #ffcf7d;
+  --ouro-esc: #c89a00;
+  --fundo: #f4f5f9;
+  --borda: #e4e6ef;
+  --texto: #1a1d2e;
+  --medio: #5a5f7a;
+  --claro: #9499b5;
+  --verde: #10b981;
+  --verde-bg: #d1fae5;
+  --rojo: #ef4444;
+  --rojo-bg: #fee2e2;
+  --amber: #f59e0b;
+  --amber-bg: #fef3c7;
+  --sombra: 0 1px 3px rgba(12,19,61,.08), 0 4px 12px rgba(12,19,61,.06);
+  --sombra-md: 0 4px 20px rgba(12,19,61,.12), 0 1px 4px rgba(12,19,61,.06);
+}
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { font-size:14px; }
+body {
+  font-family:'Montserrat',system-ui,sans-serif;
+  background:var(--fundo);
+  color:var(--texto);
+  min-height:100vh;
+}
+
+/* ── TOPBAR ─────────────────────────────── */
+.topbar {
+  background:var(--azul);
+  height:56px;
+  padding:0 28px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  z-index:200;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.tb-brand { display:flex; align-items:center; gap:10px; }
+.tb-logo {
+  background:var(--ouro);
+  color:var(--azul);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.12em;
+  padding:4px 9px;
+  border-radius:5px;
+}
+.tb-title { color:#fff; font-size:13px; font-weight:700; }
+.tb-sub { color:rgba(255,255,255,.35); font-size:9px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; }
+.tb-status {
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:10px;
+  font-weight:600;
+  color:rgba(255,255,255,.5);
+}
+.tb-dot {
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--verde);
+  box-shadow:0 0 6px var(--verde);
+  animation: pulse-dot 2s infinite;
+}
+@keyframes pulse-dot {
+  0%,100% { opacity:1; }
+  50% { opacity:.4; }
+}
+
+/* ── TABS ───────────────────────────────── */
+.tabs {
+  background:#fff;
+  border-bottom:1px solid var(--borda);
+  padding:0 28px;
+  display:flex;
+  gap:2px;
+}
+.tab {
+  padding:13px 18px;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.04em;
+  color:var(--claro);
+  cursor:pointer;
+  border-bottom:2px solid transparent;
+  transition:all .18s;
+  white-space:nowrap;
+}
+.tab:hover { color:var(--azul); }
+.tab.active { color:var(--azul); border-bottom-color:var(--azul); }
+
+/* ── CONTEÚDO ────────────────────────────── */
+.content { padding:24px 28px; max-width:1240px; }
+
+/* ── STATS ───────────────────────────────── */
+.stats {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:24px;
+}
+.stat {
+  background:#fff;
+  border:1px solid var(--borda);
+  border-radius:12px;
+  padding:18px 20px;
+  box-shadow:var(--sombra);
+  position:relative;
+  overflow:hidden;
+}
+.stat::after {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:3px;
+  background:var(--ouro);
+}
+.stat-num {
+  font-size:30px;
+  font-weight:800;
+  line-height:1;
+  margin-bottom:6px;
+}
+.stat-lbl {
+  font-size:10px;
+  font-weight:600;
+  color:var(--claro);
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
+
+/* ── CARD ────────────────────────────────── */
+.card {
+  background:#fff;
+  border:1px solid var(--borda);
+  border-radius:14px;
+  overflow:hidden;
+  margin-bottom:20px;
+  box-shadow:var(--sombra);
+}
+.card-head {
+  padding:16px 22px;
+  border-bottom:1px solid var(--borda);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+.card-title {
+  font-size:13px;
+  font-weight:800;
+  color:var(--azul);
+  letter-spacing:.02em;
+}
+
+/* ── TABELA ──────────────────────────────── */
+table { width:100%; border-collapse:collapse; }
+th {
+  padding:9px 18px;
+  text-align:left;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--claro);
+  background:var(--fundo);
+  border-bottom:1px solid var(--borda);
+  white-space:nowrap;
+}
+td {
+  padding:12px 18px;
+  font-size:12px;
+  color:var(--texto);
+  border-bottom:1px solid var(--borda);
+  vertical-align:middle;
+}
+tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:#fafbff; }
+.vazio {
+  text-align:center;
+  padding:40px;
+  color:var(--claro);
+  font-size:13px;
+  font-style:italic;
+}
+.loading-row td {
+  text-align:center;
+  padding:30px;
+  color:var(--claro);
+  font-size:12px;
+}
+
+/* ── BADGES ──────────────────────────────── */
+.badge {
+  display:inline-block;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  padding:3px 9px;
+  border-radius:20px;
+}
+.badge-green { background:var(--verde-bg); color:#059669; }
+.badge-red   { background:var(--rojo-bg);  color:#dc2626; }
+.badge-amber { background:var(--amber-bg); color:#b45309; }
+
+/* ── BOTÕES ──────────────────────────────── */
+.btn {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:700;
+  border-radius:8px;
+  padding:8px 16px;
+  cursor:pointer;
+  border:none;
+  transition:all .16s;
+  white-space:nowrap;
+}
+.btn-primary { background:var(--azul); color:#fff; }
+.btn-primary:hover { background:var(--azul-m); }
+.btn-ouro { background:var(--ouro); color:var(--azul); }
+.btn-ouro:hover { background:#ffd98e; }
+.btn-verde { background:var(--verde); color:#fff; }
+.btn-verde:hover { filter:brightness(1.08); }
+.btn-ghost {
+  background:transparent;
+  color:var(--medio);
+  border:1.5px solid var(--borda);
+  padding:7px 15px;
+}
+.btn-ghost:hover { border-color:var(--azul); color:var(--azul); }
+.btn-sm {
+  font-size:9px;
+  font-weight:700;
+  padding:4px 10px;
+  border-radius:6px;
+  border:1.5px solid var(--borda);
+  background:none;
+  color:var(--medio);
+  cursor:pointer;
+  font-family:inherit;
+  transition:all .14s;
+}
+.btn-sm:hover { border-color:var(--azul); color:var(--azul); background:var(--azul-lt); }
+.btn-sm-red { border-color:rgba(239,68,68,.3); color:var(--rojo); }
+.btn-sm-red:hover { background:var(--rojo-bg); border-color:var(--rojo); }
+.btn-sm-green { border-color:rgba(16,185,129,.3); color:var(--verde); }
+.btn-sm-green:hover { background:var(--verde-bg); border-color:var(--verde); }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+.td-actions { display:flex; gap:5px; flex-wrap:wrap; }
+
+/* ── MODAL ───────────────────────────────── */
+.overlay {
+  position:fixed;
+  inset:0;
+  background:rgba(10,15,50,.5);
+  backdrop-filter:blur(5px);
+  z-index:400;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.overlay.open { display:flex; }
+.modal {
+  background:#fff;
+  border-radius:20px;
+  padding:34px;
+  width:100%;
+  max-width:540px;
+  position:relative;
+  box-shadow:var(--sombra-md);
+  max-height:90vh;
+  overflow-y:auto;
+  animation: modal-in .22s ease;
+}
+.modal-lg { max-width:700px; }
+@keyframes modal-in {
+  from { opacity:0; transform:translateY(16px) scale(.98); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+.modal-close {
+  position:absolute;
+  top:16px; right:16px;
+  background:var(--fundo);
+  border:none;
+  width:30px; height:30px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  color:var(--medio);
+  display:flex; align-items:center; justify-content:center;
+}
+.modal-close:hover { background:var(--borda); }
+.modal-title { font-size:17px; font-weight:800; color:var(--azul); margin-bottom:4px; }
+.modal-sub { font-size:11px; color:var(--claro); margin-bottom:22px; }
+
+/* ── FORM ────────────────────────────────── */
+.fg { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.field { display:flex; flex-direction:column; gap:5px; }
+.field.full { grid-column:1/-1; }
+.flabel {
+  font-size:9px;
+  font-weight:700;
+  color:var(--claro);
+  letter-spacing:.16em;
+  text-transform:uppercase;
+}
+.inp {
+  background:var(--fundo);
+  border:1.5px solid var(--borda);
+  border-radius:8px;
+  padding:9px 12px;
+  font-size:12px;
+  color:var(--texto);
+  font-family:inherit;
+  outline:none;
+  width:100%;
+  transition:border-color .18s, background .18s;
+}
+.inp:focus { border-color:var(--azul); background:#fff; }
+.inp::placeholder { color:var(--claro); }
+.modal-foot {
+  display:flex;
+  gap:10px;
+  justify-content:flex-end;
+  margin-top:22px;
+  padding-top:18px;
+  border-top:1px solid var(--borda);
+}
+
+/* ── SECTION HEADER (modal interno) ──────── */
+.sec-head {
+  padding:10px 18px;
+  background:rgba(12,19,61,.03);
+  border-bottom:1px solid var(--borda);
+  border-top:1px solid var(--borda);
+  font-size:10px;
+  font-weight:700;
+  color:var(--azul);
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.sec-head:first-child { border-top:none; }
+.reserva-item {
+  padding:12px 18px;
+  border-bottom:1px solid var(--borda);
+  font-size:12px;
+}
+.reserva-item:last-child { border-bottom:none; }
+
+/* ── TOAST ───────────────────────────────── */
+.toast {
+  position:fixed;
+  bottom:22px; right:22px;
+  padding:11px 20px;
+  border-radius:10px;
+  font-size:12px;
+  font-weight:700;
+  font-family:inherit;
+  box-shadow:var(--sombra-md);
+  opacity:0;
+  transform:translateY(8px);
+  transition:all .25s;
+  z-index:600;
+  pointer-events:none;
+  max-width:320px;
+}
+.toast.show { opacity:1; transform:translateY(0); }
+.toast-success { background:var(--azul); color:#fff; }
+.toast-error { background:var(--rojo); color:#fff; }
+.toast-info { background:var(--medio); color:#fff; }
+
+/* ── PAGES ───────────────────────────────── */
+.page { display:none; }
+.page.active { display:block; }
+
+/* ── RESPONSIVO ──────────────────────────── */
+@media (max-width:900px) {
+  .stats { grid-template-columns:repeat(2,1fr); }
+  .content { padding:18px 16px; }
+  .tabs { padding:0 16px; overflow-x:auto; }
+}
 </style>
 </head>
 <body>
 
-<div class="modal-overlay" id="modal-partner">
-  <div class="modal">
-    <button class="modal-close" onclick="fecharModal('modal-partner')">✕</button>
-    <div class="modal-title" id="mp-title">Novo Partner</div>
-    <div class="modal-sub" id="mp-sub">Preencha os dados para cadastrar um novo partner.</div>
-    <div class="fg">
-      <div class="field full"><label class="label">Nome da Empresa *</label><input class="inp" id="p-empresa" placeholder="Ex: Agro Soluções Ltda"/></div>
-      <div class="field full" id="field-email"><label class="label">E-mail de acesso *</label><input class="inp" id="p-email" type="email" placeholder="email@empresa.com"/></div>
-      <div class="field full" id="field-senha"><label class="label">Senha de acesso *</label><input class="inp" id="p-senha" type="text" placeholder="Senha que o partner vai usar"/></div>
-      <div class="field"><label class="label">Vigência</label><input class="inp" id="p-vigencia" placeholder="Jan/2026 a Jan/2027"/></div>
-      <div class="field"><label class="label">Próxima Revisão</label><input class="inp" id="p-revisao" placeholder="Abr/2026"/></div>
-      <div class="field full"><label class="label">Valor</label><input class="inp" id="p-valor" placeholder="R$ 2.000/mês"/></div>
-    </div>
-    <div class="modal-foot">
-      <button class="btn-ghost" onclick="fecharModal('modal-partner')">Cancelar</button>
-      <button class="btn-primary" id="btn-salvar-partner" onclick="salvarPartner()">Cadastrar Partner</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-reservas">
-  <div class="modal" style="max-width:700px;">
-    <button class="modal-close" onclick="fecharModal('modal-reservas')">✕</button>
-    <div class="modal-title" id="mr-title">Reservas</div>
-    <div class="modal-sub" id="mr-sub"></div>
-    <div id="mr-conteudo"></div>
-    <div class="modal-foot">
-      <button class="btn-ghost" onclick="fecharModal('modal-reservas')">Fechar</button>
-      <button class="btn-green" onclick="exportarCSV()">⬇ Exportar CSV</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-material">
-  <div class="modal" style="max-width:620px;">
-    <button class="modal-close" onclick="fecharModal('modal-material')">✕</button>
-    <div class="modal-title" id="mm-title">Material</div>
-    <div class="modal-sub" id="mm-sub"></div>
-    <div id="mm-conteudo"></div>
-    <div class="modal-foot">
-      <button class="btn-ghost" onclick="fecharModal('modal-material')">Fechar</button>
-    </div>
-  </div>
-</div>
-
+<!-- TOPBAR -->
 <div class="topbar">
-  <div class="tb-left">
-    <div class="tb-badge">GATUA</div>
-    <div><div class="tb-name">Painel Admin</div><div class="tb-admin">Uso exclusivo</div></div>
+  <div class="tb-brand">
+    <div class="tb-logo">GATUA</div>
+    <div>
+      <div class="tb-title">Painel Admin</div>
+      <div class="tb-sub">Uso exclusivo Gatua</div>
+    </div>
+  </div>
+  <div class="tb-status">
+    <div class="tb-dot"></div>
+    <span id="tb-count">Carregando...</span>
   </div>
 </div>
 
+<!-- TABS -->
 <div class="tabs">
-  <div class="tab active" onclick="irTab('dashboard',this)">Dashboard</div>
-  <div class="tab" onclick="irTab('partners',this)">Partners</div>
-  <div class="tab" onclick="irTab('reservas',this)">Todas as Reservas</div>
-  <div class="tab" onclick="irTab('materiais',this)">Materiais Enviados</div>
+  <div class="tab active" data-tab="dashboard">Dashboard</div>
+  <div class="tab" data-tab="partners">Partners</div>
+  <div class="tab" data-tab="reservas">Todas as Reservas</div>
+  <div class="tab" data-tab="materiais">Materiais</div>
 </div>
 
+<!-- CONTEÚDO -->
 <div class="content">
 
+  <!-- DASHBOARD -->
   <div class="page active" id="pg-dashboard">
     <div class="stats">
-      <div class="stat"><div class="stat-num" style="color:var(--azul);" id="st-partners">—</div><div class="stat-lbl">Partners ativos</div></div>
-      <div class="stat"><div class="stat-num" style="color:var(--verde);" id="st-reservas">—</div><div class="stat-lbl">Reservas feitas</div></div>
-      <div class="stat"><div class="stat-num" style="color:var(--dourado-esc);" id="st-ingressos">—</div><div class="stat-lbl">Ingressos utilizados</div></div>
-      <div class="stat"><div class="stat-num" style="color:var(--claro);" id="st-materiais">—</div><div class="stat-lbl">Materiais enviados</div></div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--azul);" id="st-partners">—</div>
+        <div class="stat-lbl">Partners ativos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--verde);" id="st-reservas">—</div>
+        <div class="stat-lbl">Reservas feitas</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--ouro-esc);" id="st-ingressos">—</div>
+        <div class="stat-lbl">Ingressos utilizados</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" style="color:var(--claro);" id="st-materiais">—</div>
+        <div class="stat-lbl">Materiais enviados</div>
+      </div>
     </div>
     <div class="card">
-      <div class="card-head"><div class="card-title">Reservas por Evento</div></div>
-      <table><thead><tr><th>Evento</th><th>Data</th><th>Reservas</th><th>Participantes</th></tr></thead>
-      <tbody id="tb-ev-resumo"></tbody></table>
+      <div class="card-head">
+        <div class="card-title">Reservas por Evento</div>
+      </div>
+      <table>
+        <thead><tr><th>Evento</th><th>Data</th><th>Reservas</th><th>Participantes</th></tr></thead>
+        <tbody id="tb-ev"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-head"><div class="card-title">Partners — Uso de Ingressos</div></div>
+      <table>
+        <thead><tr><th>Empresa</th><th>Ingressos Usados</th><th>Disponíveis</th><th>% Uso</th></tr></thead>
+        <tbody id="tb-uso"></tbody>
+      </table>
     </div>
   </div>
 
+  <!-- PARTNERS -->
   <div class="page" id="pg-partners">
     <div class="card">
-      <div class="card-head"><div class="card-title">Partners Cadastrados</div><button class="btn-gold" onclick="abrirNovoPartner()">+ Novo Partner</button></div>
-      <table><thead><tr><th>Empresa</th><th>E-mail</th><th>Vigência</th><th>Ingressos</th><th>Status</th><th>Ações</th></tr></thead>
-      <tbody id="tb-partners"></tbody></table>
+      <div class="card-head">
+        <div class="card-title">Partners Cadastrados</div>
+        <button class="btn btn-ouro" id="btn-novo-partner">+ Novo Partner</button>
+      </div>
+      <table>
+        <thead><tr><th>Empresa</th><th>E-mail</th><th>Vigência</th><th>Valor</th><th>Ingressos</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="tb-partners"></tbody>
+      </table>
     </div>
   </div>
 
+  <!-- RESERVAS -->
   <div class="page" id="pg-reservas">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-      <div style="font-size:16px;font-weight:800;color:var(--azul);">Todas as Reservas</div>
-      <button class="btn-green" onclick="exportarTodasCSV()">⬇ Exportar CSV</button>
+      <div style="font-size:15px;font-weight:800;color:var(--azul);">Todas as Reservas</div>
+      <button class="btn btn-verde" id="btn-exportar-todas">⬇ Exportar CSV</button>
     </div>
     <div class="card">
-      <table><thead><tr><th>Partner</th><th>Participante</th><th>Cargo / Empresa</th><th>Evento</th><th>E-mail</th><th>Telefone</th><th>CPF</th></tr></thead>
-      <tbody id="tb-todas-reservas"></tbody></table>
+      <table>
+        <thead><tr><th>Partner</th><th>Participante</th><th>Cargo / Empresa</th><th>Evento</th><th>E-mail</th><th>Telefone</th><th>CPF</th></tr></thead>
+        <tbody id="tb-reservas-all"></tbody>
+      </table>
     </div>
   </div>
 
+  <!-- MATERIAIS -->
   <div class="page" id="pg-materiais">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
-      <div style="font-size:16px;font-weight:800;color:var(--azul);">Materiais para Divulgação</div>
+    <div style="margin-bottom:14px;">
+      <div style="font-size:15px;font-weight:800;color:var(--azul);">Materiais para Divulgação</div>
     </div>
     <div class="card">
-      <table><thead><tr><th>Partner</th><th>Título</th><th>Tipo</th><th>Canal</th><th>Responsável</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
-      <tbody id="tb-materiais"></tbody></table>
+      <table>
+        <thead><tr><th>Partner</th><th>Título</th><th>Tipo</th><th>Canal</th><th>Responsável</th><th>Data</th><th>Status</th><th>Ações</th></tr></thead>
+        <tbody id="tb-materiais-all"></tbody>
+      </table>
     </div>
   </div>
 
+</div><!-- /content -->
+
+<!-- MODAL — NOVO / EDITAR PARTNER -->
+<div class="overlay" id="modal-partner">
+  <div class="modal">
+    <button class="modal-close" id="close-modal-partner">✕</button>
+    <div class="modal-title" id="mp-titulo">Novo Partner</div>
+    <div class="modal-sub" id="mp-sub">Preencha os dados para cadastrar um novo partner.</div>
+    <div class="fg">
+      <div class="field full">
+        <label class="flabel">Nome da Empresa *</label>
+        <input class="inp" id="p-empresa" placeholder="Ex: Agro Soluções Ltda"/>
+      </div>
+      <div class="field full" id="wrap-email">
+        <label class="flabel">E-mail de acesso *</label>
+        <input class="inp" id="p-email" type="email" placeholder="email@empresa.com"/>
+      </div>
+      <div class="field full" id="wrap-senha">
+        <label class="flabel">Senha de acesso *</label>
+        <input class="inp" id="p-senha" type="text" placeholder="Senha para o partner entrar no portal"/>
+      </div>
+      <div class="field">
+        <label class="flabel">Vigência</label>
+        <input class="inp" id="p-vigencia" placeholder="Jan/2026 a Jan/2027"/>
+      </div>
+      <div class="field">
+        <label class="flabel">Próxima Revisão</label>
+        <input class="inp" id="p-revisao" placeholder="Abr/2026"/>
+      </div>
+      <div class="field full">
+        <label class="flabel">Valor do Contrato</label>
+        <input class="inp" id="p-valor" placeholder="R$ 2.000/mês"/>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="cancel-modal-partner">Cancelar</button>
+      <button class="btn btn-primary" id="btn-salvar-partner">Cadastrar Partner</button>
+    </div>
+  </div>
 </div>
 
-<div class="toast" id="toast-el"></div>
+<!-- MODAL — RESERVAS DO PARTNER -->
+<div class="overlay" id="modal-reservas">
+  <div class="modal modal-lg">
+    <button class="modal-close" id="close-modal-reservas">✕</button>
+    <div class="modal-title" id="mr-titulo">Reservas</div>
+    <div class="modal-sub" id="mr-sub"></div>
+    <div id="mr-corpo"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="cancel-modal-reservas">Fechar</button>
+      <button class="btn btn-verde" id="btn-exportar-partner">⬇ Exportar CSV</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL — DETALHE MATERIAL -->
+<div class="overlay" id="modal-material">
+  <div class="modal">
+    <button class="modal-close" id="close-modal-material">✕</button>
+    <div class="modal-title" id="mm-titulo">Material</div>
+    <div class="modal-sub" id="mm-sub"></div>
+    <div id="mm-corpo"></div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" id="cancel-modal-material">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-var _sb = window.supabase.createClient(
-  'https://dsnckudhjxcsmyifseac.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzbmNrdWRoanhjc215aWZzZWFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTExMjYsImV4cCI6MjA4ODYyNzEyNn0.jAmPEPB9scyKH67rfW3fA5Sw4hL4fRgf_WrOkimQjPs'
-);
+(function() {
+  /* ── CONFIG ─────────────────────────────── */
+  const SUPA_URL = 'https://dsnckudhjxcsmyifseac.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzbmNrdWRoanhjc215aWZzZWFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTExMjYsImV4cCI6MjA4ODYyNzEyNn0.jAmPEPB9scyKH67rfW3fA5Sw4hL4fRgf_WrOkimQjPs';
+  const sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
-var EVENTOS = [
-  {nome:'Gatua Meeting - TI do Futuro: A Nova Gestão de TI', data:'21/05/2026'},
-  {nome:'Gatua Meeting - Campo Inteligente: Tecnologia na Gestão Agrícola', data:'20/08/2026'},
-  {nome:'Gatua Meeting - Gestão e Tecnologia no Agro: Da Gestão à IA', data:'17/09/2026'},
-  {nome:'Gatua Meeting - Indústria Inteligente: Tecnologia na Agroindústria', data:'12/11/2026'}
-];
+  const EVENTOS = [
+    { nome: 'Gatua Meeting - TI do Futuro: A Nova Gestão de TI',             data: '21/05/2026' },
+    { nome: 'Gatua Meeting - Campo Inteligente: Tecnologia na Gestão Agrícola', data: '20/08/2026' },
+    { nome: 'Gatua Meeting - Gestão e Tecnologia no Agro: Da Gestão à IA',   data: '17/09/2026' },
+    { nome: 'Gatua Meeting - Indústria Inteligente: Tecnologia na Agroindústria', data: '12/11/2026' }
+  ];
 
-var todosPartners = [];
-var todasReservas = [];
-var todosMateriais = [];
-var editandoId = null;
-var reservasModal = [];
+  /* ── ESTADO ──────────────────────────────── */
+  let partners = [];
+  let reservas = [];
+  let materiais = [];
+  let editandoId = null;
+  let reservasModalPartner = null;
 
-async function carregarTudo() {
-  var pr = await _sb.from('partners').select('*').order('created_at',{ascending:false});
-  var rv = await _sb.from('reservas').select('*').order('created_at',{ascending:true});
-  var mt = await _sb.from('divulgacoes').select('*').order('created_at',{ascending:false});
-  todosPartners = pr.data || [];
-  todasReservas = rv.data || [];
-  todosMateriais = mt.data || [];
-  renderDashboard();
-  renderPartners();
-  renderTodasReservas();
-  renderMateriais();
-}
+  /* ── CARREGAMENTO ────────────────────────── */
+  async function carregarTudo() {
+    try {
+      const [pr, rv, mt] = await Promise.all([
+        sb.from('partners').select('*').order('created_at', { ascending: false }),
+        sb.from('reservas').select('*').order('created_at', { ascending: true }),
+        sb.from('divulgacoes').select('*').order('created_at', { ascending: false })
+      ]);
 
-function reservasPorPartner(pid) { return todasReservas.filter(function(r){return r.partner_id===pid;}); }
+      if (pr.error) throw new Error('Partners: ' + pr.error.message);
+      if (rv.error) throw new Error('Reservas: ' + rv.error.message);
+      if (mt.error) throw new Error('Materiais: ' + mt.error.message);
 
-function renderDashboard() {
-  var ativos = todosPartners.filter(function(p){return p.ativo!==false;}).length;
-  document.getElementById('st-partners').textContent = ativos;
-  document.getElementById('st-reservas').textContent = todasReservas.length;
-  document.getElementById('st-ingressos').textContent = todasReservas.length;
-  document.getElementById('st-materiais').textContent = todosMateriais.length;
-  var tbody = document.getElementById('tb-ev-resumo');
-  tbody.innerHTML = '';
-  EVENTOS.forEach(function(ev){
-    var res = todasReservas.filter(function(r){return r.evento_nome===ev.nome;});
-    var nomes = res.map(function(r){return r.nome_participante;}).join(', ') || '—';
-    var tr = document.createElement('tr');
-    tr.innerHTML = '<td style="font-weight:700;">'+ev.nome+'</td><td>'+ev.data+'</td><td><strong>'+res.length+'</strong> reserva'+(res.length!==1?'s':'')+'</td><td style="font-size:11px;color:var(--claro);">'+nomes+'</td>';
-    tbody.appendChild(tr);
-  });
-}
+      partners  = pr.data || [];
+      reservas  = rv.data || [];
+      materiais = mt.data || [];
 
-function renderPartners() {
-  var tbody = document.getElementById('tb-partners');
-  tbody.innerHTML = '';
-  if(!todosPartners.length){tbody.innerHTML='<tr><td colspan="6" class="vazio">Nenhum partner cadastrado.</td></tr>';return;}
-  todosPartners.forEach(function(p){
-    var ativo = p.ativo!==false;
-    var usados = reservasPorPartner(p.id).length;
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td><strong>'+p.nome_empresa+'</strong></td>'+
-      '<td style="color:var(--claro);">'+(p.email_acesso||'—')+'</td>'+
-      '<td>'+(p.vigencia||'—')+'</td>'+
-      '<td>'+usados+'/12</td>'+
-      '<td><span class="badge '+(ativo?'ativo':'inativo')+'">'+(ativo?'Ativo':'Inativo')+'</span></td>'+
-      '<td><div class="td-actions">'+
-        '<button class="btn-sm" onclick="verReservas(''+p.id+'',''+p.nome_empresa+'')">Reservas</button>'+
-        '<button class="btn-sm" onclick="editarPartner(''+p.id+'')">Editar</button>'+
-        (ativo?'<button class="btn-sm danger" onclick="toggleAtivo(''+p.id+'',false)">Desativar</button>':
-                '<button class="btn-sm success" onclick="toggleAtivo(''+p.id+'',true)">Reativar</button>')+
-      '</div></td>';
-    tbody.appendChild(tr);
-  });
-}
+      // Status bar
+      const ativos = partners.filter(p => p.ativo !== false).length;
+      document.getElementById('tb-count').textContent =
+        ativos + ' partner' + (ativos !== 1 ? 's' : '') + ' · ' +
+        reservas.length + ' reserva' + (reservas.length !== 1 ? 's' : '');
 
-function renderTodasReservas() {
-  var tbody = document.getElementById('tb-todas-reservas');
-  tbody.innerHTML = '';
-  if(!todasReservas.length){tbody.innerHTML='<tr><td colspan="7" class="vazio">Nenhuma reserva ainda.</td></tr>';return;}
-  todasReservas.forEach(function(r){
-    var p = todosPartners.find(function(x){return x.id===r.partner_id;});
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td><strong>'+(p?p.nome_empresa:'—')+'</strong></td>'+
-      '<td><strong>'+r.nome_participante+'</strong></td>'+
-      '<td style="font-size:11px;">'+r.cargo+' · '+r.empresa+'</td>'+
-      '<td style="font-size:11px;">'+r.evento_nome+'</td>'+
-      '<td style="color:var(--claro);">'+r.email+'</td>'+
-      '<td style="color:var(--claro);">'+r.telefone+'</td>'+
-      '<td style="color:var(--claro);">'+(r.cpf||'—')+'</td>';
-    tbody.appendChild(tr);
-  });
-}
+      renderDashboard();
+      renderPartners();
+      renderTodasReservas();
+      renderMateriais();
 
-function renderMateriais() {
-  var tbody = document.getElementById('tb-materiais');
-  tbody.innerHTML = '';
-  if(!todosMateriais.length){tbody.innerHTML='<tr><td colspan="8" class="vazio">Nenhum material enviado ainda.</td></tr>';return;}
-  todosMateriais.forEach(function(m){
-    var cor = m.status==='Aprovado'?'var(--verde)':m.status==='Recusado'?'var(--vermelho)':'var(--laranja)';
-    var tr = document.createElement('tr');
-    tr.innerHTML =
-      '<td><strong>'+(m.partner_nome||'—')+'</strong></td>'+
-      '<td style="max-width:180px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="'+m.titulo+'">'+m.titulo+'</td>'+
-      '<td style="font-size:11px;color:var(--claro);">'+(m.tipo||'—')+'</td>'+
-      '<td style="font-size:11px;color:var(--claro);">'+(m.canal||'—')+'</td>'+
-      '<td style="font-size:11px;">'+m.responsavel+'<br><span style="color:var(--claro);">'+m.email+'</span></td>'+
-      '<td style="font-size:11px;color:var(--claro);">'+new Date(m.created_at).toLocaleDateString('pt-BR')+'</td>'+
-      '<td><span style="font-size:10px;font-weight:700;color:'+cor+';">'+m.status+'</span></td>'+
-      '<td><div class="td-actions">'+
-        '<button class="btn-sm" onclick="verMaterial(''+m.id+'')">Ver</button>'+
-        (m.status==='Pendente'?
-          '<button class="btn-sm success" onclick="mudarStatus(''+m.id+'','Aprovado')">Aprovar</button>'+
-          '<button class="btn-sm danger" onclick="mudarStatus(''+m.id+'','Recusado')">Recusar</button>':'')+'</div></td>';
-    tbody.appendChild(tr);
-  });
-}
-
-function verMaterial(id) {
-  var m = todosMateriais.find(function(x){return x.id===id;});
-  if(!m) return;
-  document.getElementById('mm-title').textContent = m.titulo;
-  document.getElementById('mm-sub').textContent = 'Enviado por '+m.partner_nome+' em '+new Date(m.created_at).toLocaleDateString('pt-BR');
-  document.getElementById('mm-conteudo').innerHTML =
-    '<div style="display:grid;gap:12px;font-size:13px;">'+
-    '<div><strong>Tipo:</strong> '+m.tipo+'</div>'+
-    '<div><strong>Canal:</strong> '+m.canal+'</div>'+
-    '<div><strong>Período sugerido:</strong> '+(m.periodo||'—')+'</div>'+
-    '<div><strong>Link:</strong> '+(m.link?'<a href="'+m.link+'" target="_blank" style="color:var(--azul);">'+m.link+'</a>':'—')+'</div>'+
-    '<div><strong>Responsável:</strong> '+m.responsavel+' · '+m.email+'</div>'+
-    '<div><strong>Descrição:</strong><div class="mat-desc">'+m.descricao+'</div></div>'+
-    '</div>';
-  document.getElementById('modal-material').classList.add('open');
-}
-
-async function mudarStatus(id, status) {
-  await _sb.from('divulgacoes').update({status:status}).eq('id',id);
-  toast(status==='Aprovado'?'✅ Material aprovado!':'❌ Material recusado.');
-  var m = todosMateriais.find(function(x){return x.id===id;});
-  if(m) m.status = status;
-  renderMateriais();
-}
-
-function abrirNovoPartner() {
-  editandoId = null;
-  document.getElementById('mp-title').textContent = 'Novo Partner';
-  document.getElementById('mp-sub').textContent = 'Preencha os dados para cadastrar um novo partner.';
-  document.getElementById('btn-salvar-partner').textContent = 'Cadastrar Partner';
-  document.getElementById('field-senha').style.display = 'flex';
-  document.getElementById('field-email').style.display = 'flex';
-  document.getElementById('p-empresa').value = '';
-  document.getElementById('p-email').value = '';
-  document.getElementById('p-senha').value = '';
-  document.getElementById('p-vigencia').value = 'Jan/2026 a Jan/2027';
-  document.getElementById('p-revisao').value = 'Abr/2026';
-  document.getElementById('p-valor').value = 'R$ 2.000/mês';
-  document.getElementById('modal-partner').classList.add('open');
-}
-
-function editarPartner(id) {
-  var p = todosPartners.find(function(x){return x.id===id;});
-  if(!p) return;
-  editandoId = id;
-  document.getElementById('mp-title').textContent = 'Editar — '+p.nome_empresa;
-  document.getElementById('mp-sub').textContent = 'Atualize os dados do partner.';
-  document.getElementById('btn-salvar-partner').textContent = 'Salvar Alterações';
-  document.getElementById('field-senha').style.display = 'none';
-  document.getElementById('field-email').style.display = 'none';
-  document.getElementById('p-empresa').value = p.nome_empresa||'';
-  document.getElementById('p-vigencia').value = p.vigencia||'';
-  document.getElementById('p-revisao').value = p.proxima_revisao||'';
-  document.getElementById('p-valor').value = p.valor||'';
-  document.getElementById('modal-partner').classList.add('open');
-}
-
-async function salvarPartner() {
-  var empresa = document.getElementById('p-empresa').value.trim();
-  var email = document.getElementById('p-email').value.trim();
-  var senha = document.getElementById('p-senha').value.trim();
-  var vigencia = document.getElementById('p-vigencia').value.trim();
-  var revisao = document.getElementById('p-revisao').value.trim();
-  var valor = document.getElementById('p-valor').value.trim();
-  if(!empresa){toast('⚠️ Informe o nome da empresa.');return;}
-  var btn = document.getElementById('btn-salvar-partner');
-  btn.innerHTML = 'Salvando...'; btn.disabled = true;
-  try {
-    if(editandoId) {
-      await _sb.from('partners').update({nome_empresa:empresa,vigencia:vigencia,proxima_revisao:revisao,valor:valor}).eq('id',editandoId);
-      toast('✅ Partner atualizado!');
-    } else {
-      if(!email||!senha){toast('⚠️ Informe e-mail e senha.');btn.innerHTML='Cadastrar Partner';btn.disabled=false;return;}
-      var su = await _sb.auth.signUp({email:email,password:senha});
-      if(su.error){toast('❌ '+su.error.message);btn.innerHTML='Cadastrar Partner';btn.disabled=false;return;}
-      var uid = su.data.user.id;
-      await _sb.from('partners').insert({id:uid,nome_empresa:empresa,email_acesso:email,vigencia:vigencia,proxima_revisao:revisao,valor:valor,ingressos_total:12,ingressos_disponiveis:12,ingressos_utilizados:0,ativo:true});
-      toast('✅ Partner cadastrado! Login: '+email+' / Senha: '+senha);
+    } catch (e) {
+      toast('❌ Erro ao carregar dados: ' + e.message, 'error');
+      document.getElementById('tb-count').textContent = 'Erro de conexão';
     }
-    fecharModal('modal-partner');
-    await carregarTudo();
-  } catch(e) { toast('❌ Erro: '+e.message); }
-  btn.innerHTML = editandoId?'Salvar Alterações':'Cadastrar Partner';
-  btn.disabled = false;
-}
+  }
 
-async function toggleAtivo(id, ativo) {
-  await _sb.from('partners').update({ativo:ativo}).eq('id',id);
-  toast(ativo?'✅ Partner reativado.':'⚠️ Partner desativado.');
-  await carregarTudo();
-}
+  /* ── DASHBOARD ───────────────────────────── */
+  function renderDashboard() {
+    const ativos = partners.filter(p => p.ativo !== false).length;
+    el('st-partners').textContent  = ativos;
+    el('st-reservas').textContent  = reservas.length;
+    el('st-ingressos').textContent = reservas.length;
+    el('st-materiais').textContent = materiais.length;
 
-function verReservas(partnerId, nomeEmpresa) {
-  reservasModal = todasReservas.filter(function(r){return r.partner_id===partnerId;});
-  document.getElementById('mr-title').textContent = 'Reservas — '+nomeEmpresa;
-  document.getElementById('mr-sub').textContent = reservasModal.length+' reserva'+(reservasModal.length!==1?'s':'')+' registrada'+(reservasModal.length!==1?'s':'');
-  var html = '';
-  EVENTOS.forEach(function(ev){
-    var res = reservasModal.filter(function(r){return r.evento_nome===ev.nome;});
-    html += '<div class="section-head">'+ev.nome+' · '+ev.data+'<span style="font-weight:400;color:var(--claro);">'+res.length+'/3 vagas</span></div>';
-    if(!res.length){html+='<div style="padding:12px 18px;font-size:12px;color:var(--claro);">Nenhuma reserva.</div>';}
-    else{res.forEach(function(r,i){html+='<div style="padding:12px 18px;border-bottom:1px solid var(--borda);font-size:12px;"><strong>'+(i+1)+'. '+r.nome_participante+'</strong> — '+r.cargo+' · '+r.empresa+'<br><span style="color:var(--claro);">'+r.email+' · '+r.telefone+(r.cpf?' · CPF: '+r.cpf:'')+'</span></div>';});}
+    // Reservas por evento
+    const tbEv = el('tb-ev');
+    tbEv.innerHTML = '';
+    EVENTOS.forEach(ev => {
+      const res = reservas.filter(r => r.evento_nome === ev.nome);
+      const nomes = res.map(r => r.nome_participante).join(', ') || '—';
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td style="font-weight:700;max-width:260px;">' + esc(ev.nome) + '</td>' +
+        '<td style="white-space:nowrap;">' + ev.data + '</td>' +
+        '<td><strong>' + res.length + '</strong> reserva' + (res.length !== 1 ? 's' : '') + '</td>' +
+        '<td style="font-size:11px;color:var(--claro);max-width:200px;">' + esc(nomes) + '</td>';
+      tbEv.appendChild(tr);
+    });
+
+    // Uso de ingressos por partner
+    const tbUso = el('tb-uso');
+    tbUso.innerHTML = '';
+    if (!partners.length) {
+      tbUso.innerHTML = '<tr><td colspan="4" class="vazio">Nenhum partner ainda.</td></tr>';
+    } else {
+      partners.filter(p => p.ativo !== false).forEach(p => {
+        const usados = reservas.filter(r => r.partner_id === p.id).length;
+        const total  = p.ingressos_total || 12;
+        const pct    = Math.round((usados / total) * 100);
+        const cor    = pct >= 80 ? 'var(--rojo)' : pct >= 50 ? 'var(--amber)' : 'var(--verde)';
+        const tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td><strong>' + esc(p.nome_empresa) + '</strong></td>' +
+          '<td><strong style="color:' + cor + ';">' + usados + '</strong></td>' +
+          '<td>' + (total - usados) + ' / ' + total + '</td>' +
+          '<td>' +
+            '<div style="display:flex;align-items:center;gap:8px;">' +
+              '<div style="flex:1;height:6px;background:var(--borda);border-radius:3px;overflow:hidden;">' +
+                '<div style="height:100%;width:' + pct + '%;background:' + cor + ';border-radius:3px;transition:width .4s;"></div>' +
+              '</div>' +
+              '<span style="font-size:10px;font-weight:700;color:' + cor + ';">' + pct + '%</span>' +
+            '</div>' +
+          '</td>';
+        tbUso.appendChild(tr);
+      });
+    }
+  }
+
+  /* ── PARTNERS TABLE ──────────────────────── */
+  function renderPartners() {
+    const tbody = el('tb-partners');
+    tbody.innerHTML = '';
+
+    if (!partners.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="vazio">Nenhum partner cadastrado.</td></tr>';
+      return;
+    }
+
+    partners.forEach(p => {
+      const ativo  = p.ativo !== false;
+      const usados = reservas.filter(r => r.partner_id === p.id).length;
+      const total  = p.ingressos_total || 12;
+      const tr = document.createElement('tr');
+      tr.dataset.id = p.id;
+      tr.innerHTML =
+        '<td><strong>' + esc(p.nome_empresa) + '</strong></td>' +
+        '<td style="color:var(--claro);font-size:11px;">' + esc(p.email_acesso || '—') + '</td>' +
+        '<td style="font-size:11px;">' + esc(p.vigencia || '—') + '</td>' +
+        '<td style="font-size:11px;">' + esc(p.valor || '—') + '</td>' +
+        '<td>' + usados + ' / ' + total + '</td>' +
+        '<td><span class="badge ' + (ativo ? 'badge-green' : 'badge-red') + '">' + (ativo ? 'Ativo' : 'Inativo') + '</span></td>' +
+        '<td><div class="td-actions">' +
+          '<button class="btn-sm js-ver-reservas" data-id="' + p.id + '">Reservas</button>' +
+          '<button class="btn-sm js-editar" data-id="' + p.id + '">Editar</button>' +
+          (ativo
+            ? '<button class="btn-sm btn-sm-red js-toggle" data-id="' + p.id + '" data-ativo="false">Desativar</button>'
+            : '<button class="btn-sm btn-sm-green js-toggle" data-id="' + p.id + '" data-ativo="true">Reativar</button>'
+          ) +
+        '</div></td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ── TODAS AS RESERVAS ───────────────────── */
+  function renderTodasReservas() {
+    const tbody = el('tb-reservas-all');
+    tbody.innerHTML = '';
+
+    if (!reservas.length) {
+      tbody.innerHTML = '<tr><td colspan="7" class="vazio">Nenhuma reserva ainda.</td></tr>';
+      return;
+    }
+
+    reservas.forEach(r => {
+      const p = partners.find(x => x.id === r.partner_id);
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><strong>' + esc(p ? p.nome_empresa : '—') + '</strong></td>' +
+        '<td><strong>' + esc(r.nome_participante) + '</strong></td>' +
+        '<td style="font-size:11px;color:var(--medio);">' + esc(r.cargo) + ' · ' + esc(r.empresa) + '</td>' +
+        '<td style="font-size:11px;max-width:220px;">' + esc(r.evento_nome) + '</td>' +
+        '<td style="color:var(--claro);font-size:11px;">' + esc(r.email) + '</td>' +
+        '<td style="color:var(--claro);font-size:11px;">' + esc(r.telefone) + '</td>' +
+        '<td style="color:var(--claro);font-size:11px;">' + esc(r.cpf || '—') + '</td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ── MATERIAIS ───────────────────────────── */
+  function renderMateriais() {
+    const tbody = el('tb-materiais-all');
+    tbody.innerHTML = '';
+
+    if (!materiais.length) {
+      tbody.innerHTML = '<tr><td colspan="8" class="vazio">Nenhum material enviado ainda.</td></tr>';
+      return;
+    }
+
+    materiais.forEach(m => {
+      const cor = m.status === 'Aprovado' ? 'var(--verde)' : m.status === 'Recusado' ? 'var(--rojo)' : 'var(--amber)';
+      const tr = document.createElement('tr');
+      tr.dataset.id = m.id;
+      tr.innerHTML =
+        '<td><strong>' + esc(m.partner_nome || '—') + '</strong></td>' +
+        '<td style="max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="' + esc(m.titulo) + '">' + esc(m.titulo) + '</td>' +
+        '<td style="font-size:11px;color:var(--claro);">' + esc(m.tipo || '—') + '</td>' +
+        '<td style="font-size:11px;color:var(--claro);">' + esc(m.canal || '—') + '</td>' +
+        '<td style="font-size:11px;">' + esc(m.responsavel) + '</td>' +
+        '<td style="font-size:11px;color:var(--claro);white-space:nowrap;">' + fmtData(m.created_at) + '</td>' +
+        '<td><span style="font-size:9px;font-weight:700;color:' + cor + ';text-transform:uppercase;letter-spacing:.1em;">' + esc(m.status) + '</span></td>' +
+        '<td><div class="td-actions">' +
+          '<button class="btn-sm js-ver-mat" data-id="' + m.id + '">Ver</button>' +
+          (m.status === 'Pendente'
+            ? '<button class="btn-sm btn-sm-green js-aprovar" data-id="' + m.id + '">Aprovar</button>' +
+              '<button class="btn-sm btn-sm-red js-recusar" data-id="' + m.id + '">Recusar</button>'
+            : ''
+          ) +
+        '</div></td>';
+      tbody.appendChild(tr);
+    });
+  }
+
+  /* ── MODAL PARCEIRO — ABRIR/FECHAR ───────── */
+  function abrirNovoPartner() {
+    editandoId = null;
+    el('mp-titulo').textContent  = 'Novo Partner';
+    el('mp-sub').textContent     = 'Preencha os dados para cadastrar um novo partner.';
+    el('btn-salvar-partner').textContent = 'Cadastrar Partner';
+    el('wrap-email').style.display = '';
+    el('wrap-senha').style.display = '';
+    el('p-empresa').value  = '';
+    el('p-email').value    = '';
+    el('p-senha').value    = '';
+    el('p-vigencia').value = 'Jan/2026 a Jan/2027';
+    el('p-revisao').value  = 'Abr/2026';
+    el('p-valor').value    = 'R$ 2.000/mês';
+    abrirOverlay('modal-partner');
+  }
+
+  function abrirEditarPartner(id) {
+    const p = partners.find(x => x.id === id);
+    if (!p) return;
+    editandoId = id;
+    el('mp-titulo').textContent  = 'Editar — ' + p.nome_empresa;
+    el('mp-sub').textContent     = 'Atualize os dados do partner.';
+    el('btn-salvar-partner').textContent = 'Salvar Alterações';
+    el('wrap-email').style.display = 'none';
+    el('wrap-senha').style.display = 'none';
+    el('p-empresa').value  = p.nome_empresa  || '';
+    el('p-vigencia').value = p.vigencia       || '';
+    el('p-revisao').value  = p.proxima_revisao || '';
+    el('p-valor').value    = p.valor          || '';
+    abrirOverlay('modal-partner');
+  }
+
+  async function salvarPartner() {
+    const empresa  = el('p-empresa').value.trim();
+    const email    = el('p-email').value.trim();
+    const senha    = el('p-senha').value.trim();
+    const vigencia = el('p-vigencia').value.trim();
+    const revisao  = el('p-revisao').value.trim();
+    const valor    = el('p-valor').value.trim();
+
+    if (!empresa) { toast('⚠️ Informe o nome da empresa.', 'info'); return; }
+
+    const btn = el('btn-salvar-partner');
+    btn.textContent = 'Salvando...';
+    btn.disabled = true;
+
+    try {
+      if (editandoId) {
+        const { error } = await sb.from('partners')
+          .update({ nome_empresa: empresa, vigencia, proxima_revisao: revisao, valor })
+          .eq('id', editandoId);
+        if (error) throw error;
+        toast('✅ Partner atualizado!');
+      } else {
+        if (!email || !senha) {
+          toast('⚠️ Informe e-mail e senha de acesso.', 'info');
+          btn.textContent = 'Cadastrar Partner';
+          btn.disabled = false;
+          return;
+        }
+        const { error } = await sb.from('partners').insert({
+          nome_empresa:       empresa,
+          email_acesso:       email,
+          senha_acesso:       senha,
+          vigencia,
+          proxima_revisao:    revisao,
+          valor,
+          ingressos_total:    12,
+          ingressos_disponiveis: 12,
+          ingressos_utilizados:  0,
+          ativo:              true
+        });
+        if (error) throw error;
+        toast('✅ Partner cadastrado! Login: ' + email + ' / Senha: ' + senha);
+      }
+
+      fecharOverlay('modal-partner');
+      await carregarTudo();
+
+    } catch (e) {
+      toast('❌ Erro: ' + e.message, 'error');
+    }
+
+    btn.textContent = editandoId ? 'Salvar Alterações' : 'Cadastrar Partner';
+    btn.disabled = false;
+  }
+
+  async function toggleAtivo(id, ativo) {
+    try {
+      const { error } = await sb.from('partners').update({ ativo }).eq('id', id);
+      if (error) throw error;
+      toast(ativo ? '✅ Partner reativado.' : '⚠️ Partner desativado.', ativo ? 'success' : 'info');
+      await carregarTudo();
+    } catch (e) {
+      toast('❌ Erro: ' + e.message, 'error');
+    }
+  }
+
+  /* ── MODAL RESERVAS DO PARTNER ───────────── */
+  function abrirReservasPartner(partnerId) {
+    const p = partners.find(x => x.id === partnerId);
+    if (!p) return;
+    reservasModalPartner = partnerId;
+
+    el('mr-titulo').textContent = 'Reservas — ' + p.nome_empresa;
+    const res = reservas.filter(r => r.partner_id === partnerId);
+    el('mr-sub').textContent = res.length + ' reserva' + (res.length !== 1 ? 's' : '') + ' registrada' + (res.length !== 1 ? 's' : '');
+
+    let html = '';
+    EVENTOS.forEach(ev => {
+      const evRes = res.filter(r => r.evento_nome === ev.nome);
+      html += '<div class="sec-head">' + esc(ev.nome) + ' · ' + ev.data +
+              '<span style="font-weight:500;color:var(--claro);">' + evRes.length + '/3 vagas</span></div>';
+      if (!evRes.length) {
+        html += '<div style="padding:12px 18px;font-size:12px;color:var(--claro);">Nenhuma reserva neste evento.</div>';
+      } else {
+        evRes.forEach((r, i) => {
+          html += '<div class="reserva-item">' +
+            '<strong>' + (i + 1) + '. ' + esc(r.nome_participante) + '</strong> — ' + esc(r.cargo) + ' · ' + esc(r.empresa) +
+            '<br><span style="color:var(--claro);font-size:11px;">' + esc(r.email) + ' · ' + esc(r.telefone) +
+            (r.cpf ? ' · CPF: ' + esc(r.cpf) : '') + '</span>' +
+            '</div>';
+        });
+      }
+    });
+
+    el('mr-corpo').innerHTML = html || '<div class="vazio">Nenhuma reserva ainda.</div>';
+    abrirOverlay('modal-reservas');
+  }
+
+  /* ── MODAL MATERIAL ──────────────────────── */
+  function abrirMaterial(id) {
+    const m = materiais.find(x => x.id === id);
+    if (!m) return;
+    el('mm-titulo').textContent = m.titulo;
+    el('mm-sub').textContent    = 'Enviado por ' + m.partner_nome + ' em ' + fmtData(m.created_at);
+    el('mm-corpo').innerHTML =
+      '<div style="display:grid;gap:14px;font-size:13px;">' +
+      '<div><strong>Tipo:</strong> '   + esc(m.tipo)  + '</div>' +
+      '<div><strong>Canal:</strong> '  + esc(m.canal) + '</div>' +
+      '<div><strong>Período sugerido:</strong> ' + esc(m.periodo || '—') + '</div>' +
+      '<div><strong>Link:</strong> '   + (m.link ? '<a href="' + esc(m.link) + '" target="_blank" rel="noopener" style="color:var(--azul);">' + esc(m.link) + '</a>' : '—') + '</div>' +
+      '<div><strong>Responsável:</strong> ' + esc(m.responsavel) + ' · ' + esc(m.email) + '</div>' +
+      '<div><strong>Descrição:</strong><div style="background:var(--fundo);padding:12px;border-radius:8px;font-size:12px;line-height:1.7;margin-top:6px;max-height:180px;overflow-y:auto;">' + esc(m.descricao) + '</div></div>' +
+      '</div>';
+    abrirOverlay('modal-material');
+  }
+
+  async function mudarStatus(id, status) {
+    try {
+      const { error } = await sb.from('divulgacoes').update({ status }).eq('id', id);
+      if (error) throw error;
+      toast(status === 'Aprovado' ? '✅ Material aprovado!' : '❌ Material recusado.');
+      const m = materiais.find(x => x.id === id);
+      if (m) m.status = status;
+      renderMateriais();
+    } catch (e) {
+      toast('❌ Erro: ' + e.message, 'error');
+    }
+  }
+
+  /* ── EXPORT CSV ──────────────────────────── */
+  function exportarCSVPartner() {
+    if (!reservasModalPartner) return;
+    const res = reservas.filter(r => r.partner_id === reservasModalPartner);
+    const p   = partners.find(x => x.id === reservasModalPartner);
+    if (!res.length) { toast('Nenhuma reserva para exportar.', 'info'); return; }
+    const linhas = [['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
+    res.forEach(r => linhas.push([p ? p.nome_empresa : '', r.nome_participante, r.cargo, r.empresa, r.evento_nome, r.email, r.telefone, r.cpf || '']));
+    downloadCSV(linhas, 'reservas-' + (p ? p.nome_empresa.replace(/\s/g,'-') : 'partner') + '.csv');
+  }
+
+  function exportarTodasCSV() {
+    if (!reservas.length) { toast('Nenhuma reserva ainda.', 'info'); return; }
+    const linhas = [['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
+    reservas.forEach(r => {
+      const p = partners.find(x => x.id === r.partner_id);
+      linhas.push([p ? p.nome_empresa : '', r.nome_participante, r.cargo, r.empresa, r.evento_nome, r.email, r.telefone, r.cpf || '']);
+    });
+    downloadCSV(linhas, 'todas-reservas-gatua.csv');
+  }
+
+  function downloadCSV(linhas, nome) {
+    const csv  = linhas.map(l => l.map(c => '"' + (c||'').replace(/"/g,'""') + '"').join(',')).join('\n');
+    const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url  = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = nome; a.click();
+    URL.revokeObjectURL(url);
+    toast('✅ CSV exportado!');
+  }
+
+  /* ── TABS ────────────────────────────────── */
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      this.classList.add('active');
+      el('pg-' + this.dataset.tab).classList.add('active');
+    });
   });
-  document.getElementById('mr-conteudo').innerHTML = html || '<div class="vazio">Nenhuma reserva ainda.</div>';
-  document.getElementById('modal-reservas').classList.add('open');
-}
 
-function exportarCSV() {
-  if(!reservasModal.length){toast('Nenhuma reserva para exportar.');return;}
-  var linhas=[['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
-  reservasModal.forEach(function(r){
-    var p=todosPartners.find(function(x){return x.id===r.partner_id;});
-    linhas.push([p?p.nome_empresa:'',r.nome_participante,r.cargo,r.empresa,r.evento_nome,r.email,r.telefone,r.cpf||'']);
+  /* ── DELEGAÇÃO DE EVENTOS — TABELAS ──────── */
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('button');
+    if (!btn) return;
+
+    if (btn.classList.contains('js-ver-reservas')) abrirReservasPartner(btn.dataset.id);
+    if (btn.classList.contains('js-editar'))       abrirEditarPartner(btn.dataset.id);
+    if (btn.classList.contains('js-toggle'))       toggleAtivo(btn.dataset.id, btn.dataset.ativo === 'true');
+    if (btn.classList.contains('js-ver-mat'))      abrirMaterial(btn.dataset.id);
+    if (btn.classList.contains('js-aprovar'))      mudarStatus(btn.dataset.id, 'Aprovado');
+    if (btn.classList.contains('js-recusar'))      mudarStatus(btn.dataset.id, 'Recusado');
   });
-  downloadCSV(linhas,'reservas-partner.csv');
-}
 
-function exportarTodasCSV() {
-  if(!todasReservas.length){toast('Nenhuma reserva ainda.');return;}
-  var linhas=[['Partner','Participante','Cargo','Empresa','Evento','Email','Telefone','CPF']];
-  todasReservas.forEach(function(r){
-    var p=todosPartners.find(function(x){return x.id===r.partner_id;});
-    linhas.push([p?p.nome_empresa:'',r.nome_participante,r.cargo,r.empresa,r.evento_nome,r.email,r.telefone,r.cpf||'']);
+  /* ── BOTÕES FIXOS ────────────────────────── */
+  el('btn-novo-partner').addEventListener('click', abrirNovoPartner);
+  el('btn-salvar-partner').addEventListener('click', salvarPartner);
+  el('btn-exportar-todas').addEventListener('click', exportarTodasCSV);
+  el('btn-exportar-partner').addEventListener('click', exportarCSVPartner);
+
+  // Fechar modais
+  ['modal-partner','modal-reservas','modal-material'].forEach(id => {
+    el('close-' + id).addEventListener('click', () => fecharOverlay(id));
+    el('cancel-' + id) && el('cancel-' + id).addEventListener('click', () => fecharOverlay(id));
+    el(id).addEventListener('click', e => { if (e.target === el(id)) fecharOverlay(id); });
   });
-  downloadCSV(linhas,'todas-reservas-gatua.csv');
-}
 
-function downloadCSV(linhas, nome) {
-  var csv=linhas.map(function(l){return l.map(function(c){return '"'+(c||'').replace(/"/g,'""')+'"';}).join(',');}).join('
-');
-  var blob=new Blob(['﻿'+csv],{type:'text/csv;charset=utf-8;'});
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement('a');
-  a.href=url;a.download=nome;a.click();
-  URL.revokeObjectURL(url);
-  toast('✅ CSV exportado!');
-}
+  /* ── UTILITÁRIOS ─────────────────────────── */
+  function el(id)    { return document.getElementById(id); }
+  function esc(str)  { return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function fmtData(d){ try { return new Date(d).toLocaleDateString('pt-BR'); } catch { return '—'; } }
 
-function fecharModal(id){document.getElementById(id).classList.remove('open');}
+  function abrirOverlay(id)  { el(id).classList.add('open'); }
+  function fecharOverlay(id) { el(id).classList.remove('open'); }
 
-function irTab(id, el) {
-  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-  document.getElementById('pg-'+id).classList.add('active');
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
-  el.classList.add('active');
-}
+  let _toastTimer;
+  function toast(msg, tipo = 'success') {
+    const t = el('toast');
+    t.textContent = msg;
+    t.className   = 'toast toast-' + tipo + ' show';
+    clearTimeout(_toastTimer);
+    _toastTimer = setTimeout(() => t.classList.remove('show'), 4500);
+  }
 
-function toast(msg) {
-  var t=document.getElementById('toast-el');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show');},4000);
-}
-
-carregarTudo();
-}); // end DOMContentLoaded
+  /* ── INIT ────────────────────────────────── */
+  carregarTudo();
+})();
 </script>
 </body>
 </html>
