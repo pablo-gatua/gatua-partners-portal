@@ -1047,7 +1047,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
   async function carregarTudo(uid, email) {
     try {
       const [p, rv] = await Promise.all([
-        _sb.from('partners').select('*').eq('id', uid).single(),
+        _sb.from('partners').select('*').eq('id', uid).maybeSingle(),
         _sb.from('reservas').select('*').eq('partner_id', uid).order('created_at', { ascending: true })
       ]);
       if (p.data) { partnerData = p.data; aplicarDados(p.data); }
