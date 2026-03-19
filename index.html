@@ -32,7 +32,7 @@
 html { font-size: 14px; }
 body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--fundo); color: var(--texto); min-height: 100vh; }
 
-/* ── LOADING ─────────────────────────────── */
+/*  LOADING  */
 #tela-loading {
   display: flex; align-items: center; justify-content: center;
   min-height: 100vh; background: var(--fundo);
@@ -46,7 +46,7 @@ body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--fundo
 }
 .loading-txt { font-size: 13px; color: var(--claro); font-weight: 500; }
 
-/* ── LOGIN ───────────────────────────────── */
+/*  LOGIN  */
 #tela-login {
   display: none; align-items: center; justify-content: center;
   min-height: 100vh;
@@ -105,10 +105,10 @@ body { font-family: 'Montserrat', system-ui, sans-serif; background: var(--fundo
 }
 .login-footer { text-align: center; margin-top: 24px; font-size: 11px; color: var(--claro); }
 
-/* ── APP ─────────────────────────────────── */
+/*  APP  */
 #tela-app { display: none; }
 
-/* ── SIDEBAR ─────────────────────────────── */
+/*  SIDEBAR  */
 .sidebar {
   position: fixed; left: 0; top: 0; bottom: 0; width: 256px;
   background: #fff; border-right: 1px solid var(--borda);
@@ -176,7 +176,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 }
 .btn-sair:hover { color: var(--vermelho); }
 
-/* ── MAIN ────────────────────────────────── */
+/*  MAIN  */
 .main { margin-left: 256px; min-height: 100vh; }
 .topbar {
   padding: 15px 36px; border-bottom: 1px solid var(--borda);
@@ -205,7 +205,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 }
 .btn-blue:hover { background: var(--azul-medio); }
 
-/* ── PAGES ───────────────────────────────── */
+/*  PAGES  */
 .page {
   display: none; padding: 32px 36px;
   animation: fadeIn .22s ease;
@@ -213,7 +213,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 .page.active { display: block; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-/* ── PARCEIRO — INÍCIO ───────────────────── */
+/*  PARCEIRO — INÍCIO  */
 .hero {
   background: linear-gradient(135deg, var(--azul) 0%, #131d52 50%, #0a1030 100%);
   border-radius: 20px; padding: 52px 52px 44px; margin-bottom: 0;
@@ -352,7 +352,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 }
 .next-mini:hover { box-shadow: var(--sombra-md); border-color: #c8cbe0; }
 
-/* ── EVENTOS ─────────────────────────────── */
+/*  EVENTOS  */
 .ev-card {
   background: #fff; border: 1px solid var(--borda); border-radius: 14px;
   padding: 22px; transition: all .2s;
@@ -384,7 +384,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 .btn-res.gold:hover { background: #ffd98e; }
 .btn-res:disabled { opacity: .35; cursor: not-allowed; }
 
-/* ── INGRESSOS ───────────────────────────── */
+/*  INGRESSOS  */
 .ing-saldo {
   background: #fff; border: 1px solid var(--borda); border-radius: 14px;
   padding: 24px 28px; margin-bottom: 24px; display: flex; gap: 40px; align-items: center;
@@ -422,7 +422,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 }
 .slot-txt { font-size: 12px; color: var(--claro); }
 
-/* ── DIVULGAÇÃO ──────────────────────────── */
+/*  DIVULGAÇÃO  */
 .form-card { background: #fff; border: 1px solid var(--borda); border-radius: 16px; padding: 30px 32px; margin-bottom: 24px; }
 .form-intro { font-size: 13px; color: var(--medio); margin-bottom: 24px; line-height: 1.75; max-width: 560px; }
 .fg { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
@@ -440,7 +440,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 .txta { resize: vertical; min-height: 90px; }
 .form-foot { display: flex; justify-content: flex-end; margin-top: 22px; gap: 10px; }
 
-/* ── MODAL RESERVA ───────────────────────── */
+/*  MODAL RESERVA  */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(12,19,61,.45); z-index: 400;
   display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);
@@ -484,7 +484,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 .modal-success-title { font-size: 17px; font-weight: 800; color: var(--azul); margin-bottom: 8px; }
 .modal-success-desc { font-size: 13px; color: var(--medio); line-height: 1.6; }
 
-/* ── ADMIN — OVERLAY COMPLETO ────────────── */
+/*  ADMIN — OVERLAY COMPLETO  */
 #pg-admin { padding: 0; }
 .admin-wrap { display: flex; flex-direction: column; min-height: calc(100vh - 57px); }
 .admin-tabs {
@@ -640,7 +640,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 .admin-banner-txt { font-size: 11px; font-weight: 600; color: rgba(255,255,255,.7); }
 .admin-banner-count { font-size: 11px; font-weight: 700; color: #fff; margin-left: auto; }
 
-/* ── TOAST ───────────────────────────────── */
+/*  TOAST  */
 .toast {
   position: fixed; bottom: 28px; right: 28px;
   padding: 12px 22px; border-radius: 10px;
@@ -653,7 +653,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 .toast-err { background: var(--vermelho); color: #fff; }
 .toast-info { background: var(--medio); color: #fff; }
 
-/* ── SPINNER ─────────────────────────────── */
+/*  SPINNER  */
 .spinner {
   display: inline-block; width: 15px; height: 15px;
   border: 2px solid rgba(12,19,61,.15); border-top-color: var(--azul);
@@ -984,7 +984,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
 
 <script>
 (function() {
-  /* ── CONFIG ─────────────────────────────── */
+  /*  CONFIG  */
   const SUPA_URL = 'https://dsnckudhjxcsmyifseac.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzbmNrdWRoanhjc215aWZzZWFjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwNTExMjYsImV4cCI6MjA4ODYyNzEyNn0.jAmPEPB9scyKH67rfW3fA5Sw4hL4fRgf_WrOkimQjPs';
   const _sb = window.supabase.createClient(SUPA_URL, SUPA_KEY);
@@ -1003,7 +1003,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     { id: 3, nome: 'Gatua Meeting - Indústria Inteligente: Tecnologia na Agroindústria',    data: 'Quinta-feira, 12 de Novembro de 2026 · 08:00h', info: '📅 12/11/2026 · 08:00h · Dabi Business Park — Ribeirão Preto SP', tema: 'Automação & Produção Industrial', local: '📍 Dabi Business Park — Ribeirão Preto SP', pub: 'Diretores Industriais, Gerentes de Produção, Supervisores', proximo: false }
   ];
 
-  /* ── ESTADO ──────────────────────────────── */
+  /*  ESTADO  */
   let partnerData = {};
   let reservasData = [];
   let eventoModalIdx = 0;
@@ -1015,7 +1015,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
   let aEditandoId = null;
   let aReservasModal = null;
 
-  /* ── TELAS ───────────────────────────────── */
+  /*  TELAS  */
   function mostrarLogin() {
     document.getElementById('tela-loading').style.display = 'none';
     document.getElementById('tela-login').style.display = 'flex';
@@ -1026,7 +1026,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     document.getElementById('tela-app').style.display = 'block';
   }
 
-  /* ── INIT ────────────────────────────────── */
+  /*  INIT  */
   async function init() {
     try {
       const r = await _sb.auth.getSession();
@@ -1043,7 +1043,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     }
   }
 
-  /* ── CARREGAR DADOS PARTNER ──────────────── */
+  /*  CARREGAR DADOS PARTNER  */
   async function carregarTudo(uid, email) {
     try {
       const [p, rv] = await Promise.all([
@@ -1074,7 +1074,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     document.getElementById('ing-usados').textContent = p.ingressos_utilizados || '—';
   }
 
-  /* ── NAVEGAÇÃO ───────────────────────────── */
+  /*  NAVEGAÇÃO  */
   const titulos = { inicio: 'Início', eventos: 'Eventos 2026', ingressos: 'Meus Ingressos', divulgacao: 'Enviar Divulgação', admin: 'Painel Admin' };
   window.ir = function(id, btn) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1088,7 +1088,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     if (id === 'admin') carregarAdmin();
   };
 
-  /* ── LOGIN / LOGOUT ──────────────────────── */
+  /*  LOGIN / LOGOUT  */
   window.fazerLogin = async function() {
     const em = document.getElementById('login-email').value.trim();
     const se = document.getElementById('login-senha').value;
@@ -1115,7 +1115,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     mostrarLogin();
   };
 
-  /* ── EVENTOS ─────────────────────────────── */
+  /*  EVENTOS  */
   function reservasPorEvento(nome) {
     return reservasData.filter(r => r.evento_nome === nome);
   }
@@ -1171,7 +1171,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     });
   }
 
-  /* ── MODAL RESERVA ───────────────────────── */
+  /*  MODAL RESERVA  */
   window.abrirModal = function(idx) {
     eventoModalIdx = idx;
     const ev = EVENTOS[idx];
@@ -1236,7 +1236,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     } catch (e) { showToast('Erro de conexão.'); btn.innerHTML = 'Confirmar Reserva'; btn.disabled = false; }
   };
 
-  /* ── DIVULGAÇÃO ──────────────────────────── */
+  /*  DIVULGAÇÃO  */
   window.enviarDivulgacao = async function() {
     const form = document.getElementById('form-divulgacao');
     const titulo = form.querySelector('[name="titulo"]').value.trim();
@@ -1267,7 +1267,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     } catch (e) { showToast('Erro de conexão.'); btn.innerHTML = 'Enviar para análise →'; btn.disabled = false; }
   };
 
-  /* ── ADMIN — CARREGAR ────────────────────── */
+  /*  ADMIN — CARREGAR  */
   async function carregarAdmin() {
     if (!isAdmin) return;
     try {
@@ -1287,7 +1287,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     }
   }
 
-  /* ── ADMIN — DASHBOARD ───────────────────── */
+  /*  ADMIN — DASHBOARD  */
   function aRenderDash() {
     const ativos = aPartners.filter(p => p.ativo !== false).length;
     aEl('ast-partners').textContent = ativos;
@@ -1319,7 +1319,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     });
   }
 
-  /* ── ADMIN — PARTNERS TABLE ──────────────── */
+  /*  ADMIN — PARTNERS TABLE  */
   function aRenderPartners() {
     const tbody = aEl('atb-partners');
     tbody.innerHTML = '';
@@ -1347,7 +1347,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     });
   }
 
-  /* ── ADMIN — RESERVAS ────────────────────── */
+  /*  ADMIN — RESERVAS  */
   function aRenderReservas() {
     const tbody = aEl('atb-reservas');
     tbody.innerHTML = '';
@@ -1367,7 +1367,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     });
   }
 
-  /* ── ADMIN — MATERIAIS ───────────────────── */
+  /*  ADMIN — MATERIAIS  */
   function aRenderMateriais() {
     const tbody = aEl('atb-materiais');
     tbody.innerHTML = '';
@@ -1393,7 +1393,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     });
   }
 
-  /* ── ADMIN — MODAL PARTNER ───────────────── */
+  /*  ADMIN — MODAL PARTNER  */
   function aAbrirNovo() {
     aEditandoId = null;
     aEl('amp-titulo').textContent = 'Novo Partner';
@@ -1465,7 +1465,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     } catch (e) { showToast('❌ Erro: ' + e.message, 'err'); }
   }
 
-  /* ── ADMIN — MODAL RESERVAS ──────────────── */
+  /*  ADMIN — MODAL RESERVAS  */
   function aAbrirReservas(partnerId) {
     const p = aPartners.find(x => x.id === partnerId);
     if (!p) return;
@@ -1489,7 +1489,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     aEl('amodal-reservas').classList.add('open');
   }
 
-  /* ── ADMIN — MODAL MATERIAL ──────────────── */
+  /*  ADMIN — MODAL MATERIAL  */
   function aAbrirMaterial(id) {
     const m = aMateriais.find(x => x.id === id);
     if (!m) return;
@@ -1518,7 +1518,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     } catch (e) { showToast('❌ Erro: ' + e.message, 'err'); }
   }
 
-  /* ── ADMIN — CSV ─────────────────────────── */
+  /*  ADMIN — CSV  */
   function aExportarPartner() {
     if (!aReservasModal) return;
     const res = aReservas.filter(r => r.partner_id === aReservasModal);
@@ -1549,7 +1549,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     showToast('✅ CSV exportado!');
   }
 
-  /* ── ADMIN — TABS ────────────────────────── */
+  /*  ADMIN — TABS  */
   document.querySelectorAll('.admin-tab').forEach(tab => {
     tab.addEventListener('click', function() {
       document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
@@ -1559,7 +1559,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     });
   });
 
-  /* ── ADMIN — EVENT DELEGATION ────────────── */
+  /*  ADMIN — EVENT DELEGATION  */
   document.addEventListener('click', function(e) {
     const btn = e.target.closest('button');
     if (!btn) return;
@@ -1583,7 +1583,7 @@ nav { padding: 6px 10px; flex: 1; overflow-y: auto; }
     aEl(id).addEventListener('click', e => { if (e.target === aEl(id)) aEl(id).classList.remove('open'); });
   });
 
-  /* ── UTILITÁRIOS ─────────────────────────── */
+  /*  UTILITÁRIOS  */
   function aEl(id) { return document.getElementById(id); }
   function esc(str) { return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function fmtData(d) { try { return new Date(d).toLocaleDateString('pt-BR'); } catch { return '—'; } }
